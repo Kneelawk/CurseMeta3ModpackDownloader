@@ -1,0 +1,46 @@
+import org.gradle.plugins.ide.eclipse.model.AbstractClasspathEntry
+
+plugins {
+	id 'java-library'
+	id 'eclipse'
+	id 'com.zyxist.chainsaw' version '0.3.1'
+	id 'org.beryx.jlink' version '1.4.4'
+}
+
+version = '0.0.1'
+sourceCompatibility = 11
+
+def platform = 'linux'
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation 'com.google.guava:guava:26.0-jre'
+	implementation 'com.google.code.gson:gson:2.8.5'
+	implementation 'org.apache.httpcomponents:httpclient:4.5.6'
+	implementation 'org.apache.commons:commons-lang3:3.8.1'
+	
+	implementation "org.openjfx:javafx-base:11:$platform"
+	implementation "org.openjfx:javafx-graphics:11:$platform"
+	implementation "org.openjfx:javafx-controls:11:$platform"
+}
+
+application {
+	mainClassName = 'com.github.kneelawk.cursemodpackdownloader.cursemeta3.CurseMeta3ModpackDownloader'
+}
+
+jlink {
+	launcherName = "CurseMeta3ModpackDownloader"
+}
+
+eclipse.classpath.file {
+	whenMerged { classpath ->
+		classpath.entries.each { entry ->
+			if (entry instanceof AbstractClasspathEntry) {
+				entry.entryAttributes << ['module': 'true']
+			}
+		}
+	}
+}
