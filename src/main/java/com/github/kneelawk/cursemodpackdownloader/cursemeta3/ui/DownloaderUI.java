@@ -108,7 +108,7 @@ public class DownloaderUI {
 		errorLabel.setTextFill(Color.FIREBRICK);
 		root.add(errorLabel, 0, 3, 3, 1);
 
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 600, 500);
 		primaryStage.setScene(scene);
 	}
 
