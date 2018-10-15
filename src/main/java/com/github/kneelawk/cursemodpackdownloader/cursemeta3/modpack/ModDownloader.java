@@ -1,44 +1,84 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.CurseURIUtils;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgress;
+import com.google.gson.Gson;
+
 import javafx.concurrent.Task;
 
-public class ModDownloader extends Task<DownloadResult> {
+public class ModDownloader extends Task<ModDownloadResult> {
 	private CloseableHttpClient client;
-	private FileDataJson data;
+	private Gson gson;
+	private String minecraftVersion;
+	private FileJson file;
+	private Path toDir;
 	private Path to;
+	private FileDataJson data;
 
 	private long currentProgress;
 	private long contentLength;
 
-	public ModDownloader(CloseableHttpClient client, FileDataJson data,
-			Path to) {
+	public ModDownloader(CloseableHttpClient client, Gson gson,
+			String minecraftVersion, FileJson file, Path toDir) {
 		this.client = client;
-		this.data = data;
-		this.to = to;
+		this.gson = gson;
+		this.minecraftVersion = minecraftVersion;
+		this.file = file;
+		this.toDir = toDir;
+
+		updateMessage("Waiting " + file.getProjectID() + "/" + file.getFileID()
+				+ "...");
+		updateProgress(-1, -1);
 	}
 
 	@Override
-	public DownloadResult call() {
-		HttpGet request = new HttpGet(data.getDownloadUrl());
+	public ModDownloadResult call() throws Exception {
+		updateMessage("Downloading " + file.getProjectID() + "/"
+				+ file.getFileID() + "...");
+		updateProgress(-1, -1);
+		data = AddonUtils.getAddonFileOrLatest(client, gson, minecraftVersion,
+				file.getProjectID().intValue(), file.getFileID().intValue());
+
+		updateMessage("Downloading " + data.getFileNameOnDisk() + "... 0%");
+
+		String unescapedUrl = data.getDownloadUrl();
+
+		to = toDir.resolve(
+				unescapedUrl.substring(unescapedUrl.lastIndexOf('/') + 1));
+
+		URI saneUri =
+				CurseURIUtils.sanitizeCurseDownloadUri(unescapedUrl, true);
+
+		HttpGet request = new HttpGet(saneUri);
 		try (CloseableHttpResponse response = client.execute(request)) {
+			StatusLine status = response.getStatusLine();
+			if (status.getStatusCode() / 100 != 2) {
+				System.out.println("Status error getting file:\n\tInsane:\t"
+						+ unescapedUrl + "\n\tSane:\t" + saneUri);
+				throw new BadResponseCodeException(
+						"Bad response status: " + status.toString());
+			}
+
 			HttpEntity entity = response.getEntity();
 			contentLength = entity.getContentLength();
 			InputStream is = entity.getContent();
 			OutputStream os = Files.newOutputStream(to);
 
-			updateMessage("Downloading... 0%");
+			updateMessage("Downloading " + data.getFileNameOnDisk() + "... 0%");
 			updateProgress(0, contentLength);
 
 			currentProgress = 0;
@@ -48,22 +88,20 @@ public class ModDownloader extends Task<DownloadResult> {
 				os.write(buf, 0, len);
 
 				currentProgress += len;
-				updateMessage(String.format("Downloading... %.1f%%",
-						((double) currentProgress) / ((double) contentLength)
-								* 100));
+				updateMessage(String.format("Downloading %s... %.1f%%",
+						data.getFileNameOnDisk(), ((double) currentProgress)
+								/ ((double) contentLength) * 100));
 				updateProgress(currentProgress, contentLength);
 
 				if (isCancelled()) {
 					EntityUtils.consume(entity);
-					return new DownloadResult(data, to, new DownloadProgress(
+					return new ModDownloadResult(data, to, new DownloadProgress(
 							currentProgress, contentLength));
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
-		return new DownloadResult(data, to,
+		return new ModDownloadResult(data, to,
 				new DownloadProgress(currentProgress, contentLength));
 	}
 }
