@@ -1,4 +1,4 @@
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;

@@ -1,4 +1,4 @@
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +13,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.CurseURIUtils;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgress;

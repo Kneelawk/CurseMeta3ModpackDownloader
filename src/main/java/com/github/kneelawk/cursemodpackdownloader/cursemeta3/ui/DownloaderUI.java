@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack.ModDownloader;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModDownloader;
 import com.google.common.collect.ImmutableList;
 
 import javafx.beans.property.BooleanProperty;

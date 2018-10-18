@@ -1,7 +1,7 @@
 /*
  * Created with http://www.jsonschema2pojo.org/
  */
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

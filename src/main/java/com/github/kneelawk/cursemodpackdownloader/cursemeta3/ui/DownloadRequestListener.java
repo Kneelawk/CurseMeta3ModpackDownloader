@@ -2,7 +2,7 @@ package com.github.kneelawk.cursemodpackdownloader.cursemeta3.ui;
 
 import java.nio.file.Path;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack.ModDownloader;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModDownloader;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;

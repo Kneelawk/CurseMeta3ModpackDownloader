@@ -1,4 +1,4 @@
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

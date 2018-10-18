@@ -2,7 +2,7 @@ package com.github.kneelawk.cursemodpackdownloader.cursemeta3;
 
 import java.io.IOException;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack.ModpackDownload;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModpackDownload;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.ui.DownloaderUI;
 
 import javafx.application.Application;

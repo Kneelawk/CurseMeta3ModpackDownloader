@@ -1,4 +1,4 @@
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +9,9 @@ import java.util.concurrent.Executors;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.Downloader;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.RedirectUriSanitizer;
 import com.google.gson.Gson;

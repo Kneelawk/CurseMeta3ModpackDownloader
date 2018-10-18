@@ -1,4 +1,4 @@
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 public class FileId {
 	private int projectId;

@@ -1,7 +1,8 @@
-package com.github.kneelawk.cursemodpackdownloader.cursemeta3.modpack;
+package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 import java.nio.file.Path;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgress;
 
 public class ModDownloadResult {
