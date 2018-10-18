@@ -29,7 +29,7 @@ public class ModpackDownload implements Runnable {
 	protected Path toDir;
 	protected StringProperty status;
 	protected DoubleProperty overallProgress;
-	protected ObservableList<ModDownloader> downloads;
+	protected ObservableList<ModDownloadTask> downloads;
 	protected BooleanProperty running;
 	protected BooleanProperty error;
 	protected ExecutorService executor;
@@ -39,7 +39,7 @@ public class ModpackDownload implements Runnable {
 
 	public ModpackDownload(Path modpackFile, Path toDir, StringProperty status,
 			DoubleProperty overallProgress,
-			ObservableList<ModDownloader> downloads, BooleanProperty running,
+			ObservableList<ModDownloadTask> downloads, BooleanProperty running,
 			BooleanProperty error, int numThreads) {
 		this.modpackFile = modpackFile;
 		this.toDir = toDir;
@@ -124,7 +124,7 @@ public class ModpackDownload implements Runnable {
 			for (FileJson file : files) {
 				Platform.runLater(() -> {
 					try {
-						ModDownloader download = new ModDownloader(client, gson,
+						ModDownloadTask download = new ModDownloadTask(client, gson,
 								manifest.getMinecraft().getVersion(), file,
 								modsDir);
 						downloads.add(download);

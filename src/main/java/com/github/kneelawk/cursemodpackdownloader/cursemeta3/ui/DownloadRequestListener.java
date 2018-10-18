@@ -2,7 +2,7 @@ package com.github.kneelawk.cursemodpackdownloader.cursemeta3.ui;
 
 import java.nio.file.Path;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModDownloader;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModDownloadTask;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -12,6 +12,6 @@ import javafx.collections.ObservableList;
 public interface DownloadRequestListener {
 	public void downloadModpack(Path modpackFile, Path toDir,
 			StringProperty status, DoubleProperty overallProgress,
-			ObservableList<ModDownloader> downloads, BooleanProperty running,
+			ObservableList<ModDownloadTask> downloads, BooleanProperty running,
 			BooleanProperty error, int numThreads);
 }

@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModDownloader;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModDownloadTask;
 import com.google.common.collect.ImmutableList;
 
 import javafx.beans.property.BooleanProperty;
@@ -40,7 +40,7 @@ public class DownloaderUI {
 	protected TextField modpackField;
 	protected TextField outputField;
 	protected Label statusLabel;
-	protected TableView<ModDownloader> tasks;
+	protected TableView<ModDownloadTask> tasks;
 	protected DoubleProperty overallProgress;
 	protected BooleanProperty running = new SimpleBooleanProperty(false);
 	protected BooleanProperty error = new SimpleBooleanProperty(false);
@@ -169,13 +169,13 @@ public class DownloaderUI {
 		VBox.setVgrow(tasks, Priority.ALWAYS);
 		root.getChildren().add(tasks);
 
-		TableColumn<ModDownloader, String> statusColumn =
+		TableColumn<ModDownloadTask, String> statusColumn =
 				new TableColumn<>("Status");
 		statusColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
 		statusColumn.setPrefWidth(500);
 		tasks.getColumns().add(statusColumn);
 
-		TableColumn<ModDownloader, Double> progressColumn =
+		TableColumn<ModDownloadTask, Double> progressColumn =
 				new TableColumn<>("progress");
 		progressColumn
 				.setCellValueFactory(new PropertyValueFactory<>("progress"));
@@ -184,7 +184,7 @@ public class DownloaderUI {
 		progressColumn.setPrefWidth(300);
 		tasks.getColumns().add(progressColumn);
 
-		TableColumn<ModDownloader, String> errorColumn =
+		TableColumn<ModDownloadTask, String> errorColumn =
 				new TableColumn<>("Error");
 		errorColumn
 				.setCellValueFactory(new PropertyValueFactory<>("exception"));

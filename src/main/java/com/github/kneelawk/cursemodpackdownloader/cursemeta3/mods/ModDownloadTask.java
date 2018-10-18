@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 
 import javafx.concurrent.Task;
 
-public class ModDownloader extends Task<ModDownloadResult> {
+public class ModDownloadTask extends Task<ModDownloadResult> {
 	private CloseableHttpClient client;
 	private Gson gson;
 	private String minecraftVersion;
@@ -34,7 +34,7 @@ public class ModDownloader extends Task<ModDownloadResult> {
 	private long currentProgress;
 	private long contentLength;
 
-	public ModDownloader(CloseableHttpClient client, Gson gson,
+	public ModDownloadTask(CloseableHttpClient client, Gson gson,
 			String minecraftVersion, FileJson file, Path toDir) {
 		this.client = client;
 		this.gson = gson;
