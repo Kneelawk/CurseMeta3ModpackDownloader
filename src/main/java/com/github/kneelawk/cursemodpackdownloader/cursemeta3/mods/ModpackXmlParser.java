@@ -14,12 +14,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ModpackXmlParser {
-	private static DocumentBuilderFactory factory =
-			DocumentBuilderFactory.newInstance();
 
-	public static FileId parseModpackBin(Path modpackFile) {
+	public static FileId parseModpackBin(DocumentBuilder builder, Path modpackFile) {
 		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(Files.newInputStream(modpackFile));
 			NodeList packageList = doc.getElementsByTagName("package");
 			if (packageList.getLength() > 0) {
@@ -27,14 +24,11 @@ public class ModpackXmlParser {
 				NodeList projectList = pack.getElementsByTagName("project");
 				if (projectList.getLength() > 0) {
 					Element project = (Element) projectList.item(0);
-					int projectId =
-							Integer.parseInt(project.getAttribute("id"));
+					int projectId = Integer.parseInt(project.getAttribute("id"));
 					int fileId = Integer.parseInt(project.getAttribute("file"));
 					return new FileId(projectId, fileId);
 				}
 			}
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
 		} catch (SAXException e) {
 		} catch (IOException e) {
 			e.printStackTrace();

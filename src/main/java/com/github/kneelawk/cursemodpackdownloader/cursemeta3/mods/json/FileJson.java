@@ -17,6 +17,12 @@ public class FileJson {
 	@SerializedName("required")
 	@Expose
 	private Boolean required = true;
+	@SerializedName("fileData")
+	@Expose
+	private FileDataJson fileData;
+	@SerializedName("fileError")
+	@Expose
+	private Boolean fileError;
 
 	public Long getProjectID() {
 		return projectID;
@@ -40,6 +46,22 @@ public class FileJson {
 
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+
+	public FileDataJson getFileData() {
+		return fileData;
+	}
+
+	public void setFileData(FileDataJson fileData) {
+		this.fileData = fileData;
+	}
+
+	public Boolean getFileError() {
+		return fileError;
+	}
+
+	public void setFileError(Boolean fileError) {
+		this.fileError = fileError;
 	}
 
 }

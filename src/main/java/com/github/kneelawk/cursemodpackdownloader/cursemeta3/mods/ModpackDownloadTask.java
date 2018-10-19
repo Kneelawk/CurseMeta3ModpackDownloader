@@ -2,10 +2,16 @@ package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javafx.beans.binding.NumberBinding;
+import org.apache.http.impl.client.CloseableHttpClient;
+
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
+import com.google.gson.Gson;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -18,17 +24,19 @@ import javafx.concurrent.Task;
 public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 	/*
+	 * Tools
+	 */
+
+	protected CloseableHttpClient client;
+	protected Gson gson;
+	protected ExecutorService executor;
+
+	/*
 	 * Fields
 	 */
 
 	protected Modpack modpack;
 	protected Path toDir;
-
-	/*
-	 * Objects
-	 */
-
-	protected ExecutorService executor;
 
 	/*
 	 * Properties
@@ -38,10 +46,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	protected ReadOnlyIntegerProperty totalDownloads;
 	protected IntegerProperty successfulDownloads;
 	protected IntegerProperty failedDownloads;
-	protected NumberBinding finishedDownloads;
 
-	public ModpackDownloadTask(Modpack modpack, Path toDir, int numThreads) {
+	public ModpackDownloadTask(CloseableHttpClient client, Gson gson, Modpack modpack, Path toDir, int numThreads) {
 		super();
+		this.client = client;
+		this.gson = gson;
 		this.modpack = modpack;
 		this.toDir = toDir;
 
@@ -50,12 +59,15 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 			t.setDaemon(true);
 			return t;
 		});
-		
+
+		int numFiles = modpack.getManifest().getFiles().size();
+
 		tasks = new SimpleListProperty<>(this, "tasks");
-		totalDownloads = new SimpleIntegerProperty(this, "totalDownloads", modpack.getManifest().getFiles().size());
+		totalDownloads = new SimpleIntegerProperty(this, "totalDownloads", numFiles);
 		successfulDownloads = new SimpleIntegerProperty(this, "successfulDownloads", 0);
 		failedDownloads = new SimpleIntegerProperty(this, "failedDownloads", 0);
-		finishedDownloads = successfulDownloads.add(failedDownloads);
+
+		updateMessage("Initializing modpack download...");
 	}
 
 	protected final void setTasks(ObservableList<ModDownloadTask> l) {
@@ -124,6 +136,37 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 	@Override
 	protected ModpackDownloadResult call() throws Exception {
+		updateProgress(0, getTotalDownloads());
+
+		ManifestJson manifest = modpack.getManifest();
+
+		updateMessage("Extracting overrides...");
+		modpack.extractOverrides(toDir);
+
+		Path modsDir = toDir.resolve("mods");
+		
+		CountDownLatch latch = new CountDownLatch(getTotalDownloads());
+
+		updateMessage("Downloading mods... 0 / " + getTotalDownloads());
+		for (FileJson file : manifest.getFiles()) {
+			ModDownloadTask task = new ModDownloadTask(client, gson, manifest.getMinecraft().getVersion(), file,
+					modsDir);
+			tasks.add(task);
+			task.setOnSucceeded(e -> {
+				incrementSuccessfulDownloads();
+				updateProgress(getSuccessfulDownloads(), getTotalDownloads());
+				updateMessage(
+						String.format("Downloading mods... %s / %s", getSuccessfulDownloads(), getTotalDownloads()));
+				latch.countDown();
+			});
+			task.setOnFailed(e -> {
+				incrementFaildDownloads();
+				latch.countDown();
+			});
+			task.setOnCancelled(e -> {
+				latch.countDown();
+			});
+		}
 		return null;
 	}
 

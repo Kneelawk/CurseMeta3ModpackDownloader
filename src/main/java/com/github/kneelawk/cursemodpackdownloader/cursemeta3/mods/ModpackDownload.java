@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
@@ -37,10 +40,8 @@ public class ModpackDownload implements Runnable {
 	protected int successes;
 	protected int failures;
 
-	public ModpackDownload(Path modpackFile, Path toDir, StringProperty status,
-			DoubleProperty overallProgress,
-			ObservableList<ModDownloadTask> downloads, BooleanProperty running,
-			BooleanProperty error, int numThreads) {
+	public ModpackDownload(Path modpackFile, Path toDir, StringProperty status, DoubleProperty overallProgress,
+			ObservableList<ModDownloadTask> downloads, BooleanProperty running, BooleanProperty error, int numThreads) {
 		this.modpackFile = modpackFile;
 		this.toDir = toDir;
 		this.status = status;
@@ -70,15 +71,17 @@ public class ModpackDownload implements Runnable {
 	public void run() {
 		try {
 			Gson gson = new Gson();
-			CloseableHttpClient client = HttpClients.custom()
-					.setRedirectStrategy(new RedirectUriSanitizer()).build();
+			CloseableHttpClient client = HttpClients.custom().setRedirectStrategy(new RedirectUriSanitizer()).build();
+			DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
+
 			Path modsDir = toDir.resolve("mods");
 			Files.createDirectories(modsDir);
 
 			Path modpackZip = modpackFile;
 
 			// is modpack an xml?
-			FileId id = ModpackXmlParser.parseModpackBin(modpackFile);
+			FileId id = ModpackXmlParser.parseModpackBin(dbuilder, modpackFile);
 			if (id != null) {
 				System.out.println("Loaded xml modpack, downloading zip...");
 				Platform.runLater(() -> {
@@ -86,10 +89,8 @@ public class ModpackDownload implements Runnable {
 				});
 				modpackZip = Files.createTempFile("modpack", ".zip");
 				modpackZip.toFile().deleteOnExit();
-				FileDataJson data = AddonUtils.getAddonFile(client, gson,
-						id.getProjectId(), id.getFileId());
-				Downloader downloader = new Downloader(client,
-						data.getDownloadUrl(), modpackZip);
+				FileDataJson data = AddonUtils.getAddonFile(client, gson, id.getProjectId(), id.getFileId());
+				Downloader downloader = new Downloader(client, data.getDownloadUrl(), modpackZip);
 				Platform.runLater(() -> {
 					status.bind(downloader.messageProperty());
 				});
@@ -125,21 +126,15 @@ public class ModpackDownload implements Runnable {
 				Platform.runLater(() -> {
 					try {
 						ModDownloadTask download = new ModDownloadTask(client, gson,
-								manifest.getMinecraft().getVersion(), file,
-								modsDir);
+								manifest.getMinecraft().getVersion(), file, modsDir);
 						downloads.add(download);
 						download.setOnSucceeded(event -> {
 							successes++;
-							overallProgress.set(((double) successes)
-									/ ((double) numDownloads));
-							status.set(
-									String.format("Downloading mods... %d / %d",
-											successes, numDownloads));
+							overallProgress.set(((double) successes) / ((double) numDownloads));
+							status.set(String.format("Downloading mods... %d / %d", successes, numDownloads));
 
 							if (successes + failures >= numDownloads) {
-								status.set(String.format(
-										"Done. %d / %d Mods downloaded.",
-										successes, numDownloads));
+								status.set(String.format("Done. %d / %d Mods downloaded.", successes, numDownloads));
 								running.set(false);
 							}
 						});
@@ -147,9 +142,7 @@ public class ModpackDownload implements Runnable {
 							failures++;
 
 							if (successes + failures >= numDownloads) {
-								status.set(String.format(
-										"Done. %d / %d Mods downloaded.",
-										successes, numDownloads));
+								status.set(String.format("Done. %d / %d Mods downloaded.", successes, numDownloads));
 								running.set(false);
 							}
 						});
