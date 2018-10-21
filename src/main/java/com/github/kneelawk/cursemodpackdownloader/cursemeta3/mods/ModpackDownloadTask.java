@@ -11,6 +11,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
 import com.google.gson.Gson;
 
 import javafx.application.Platform;
@@ -19,6 +20,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
@@ -64,12 +66,14 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 		int numFiles = modpack.getManifest().getFiles().size();
 
-		tasks = new SimpleListProperty<>(this, "tasks");
+		tasks = new SimpleListProperty<>(this, "tasks",
+				FXCollections.observableArrayList());
 		totalDownloads =
 				new SimpleIntegerProperty(this, "totalDownloads", numFiles);
-		successfulDownloads =
-				new SimpleListProperty<>(this, "successfulDownloads");
-		failedDownloads = new SimpleListProperty<>(this, "failedDownloads");
+		successfulDownloads = new SimpleListProperty<>(this,
+				"successfulDownloads", FXCollections.observableArrayList());
+		failedDownloads = new SimpleListProperty<>(this, "failedDownloads",
+				FXCollections.observableArrayList());
 
 		updateMessage("Initializing modpack download...");
 	}
@@ -83,6 +87,14 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 			tasks.add(t);
 		} else {
 			Platform.runLater(() -> tasks.add(t));
+		}
+	}
+
+	protected final void removeTask(ModDownloadTask t) {
+		if (Platform.isFxApplicationThread()) {
+			tasks.remove(t);
+		} else {
+			Platform.runLater(() -> tasks.remove(t));
 		}
 	}
 
@@ -173,24 +185,7 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 		updateMessage("Downloading mods... 0 / " + getTotalDownloads());
 		for (FileJson file : manifest.getFiles()) {
 			if (file.isRequired()) {
-				ModDownloadTask task = new ModDownloadTask(client, gson,
-						manifest.getMinecraft().getVersion(), file, modsDir);
-				addTask(task);
-				task.setOnSucceeded(e -> {
-					addSuccessfulDownload(task.getFile());
-					updateProgress(getSuccessfulDownloads().size(),
-							getTotalDownloads());
-					updateMessage(String.format("Downloading mods... %s / %s",
-							getSuccessfulDownloads(), getTotalDownloads()));
-					latch.countDown();
-				});
-				task.setOnFailed(e -> {
-					addFaildDownload(task.getFile());
-					latch.countDown();
-				});
-				task.setOnCancelled(e -> {
-					latch.countDown();
-				});
+				startModDownload(latch, manifest, file, modsDir);
 			}
 		}
 
@@ -200,4 +195,32 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 				getSuccessfulDownloads(), getFailedDownloads());
 	}
 
+	private void startModDownload(CountDownLatch latch, ManifestJson manifest,
+			FileJson file, Path modsDir) {
+		ModDownloadTask task = new ModDownloadTask(client, gson,
+				manifest.getMinecraft().getVersion(), file, modsDir);
+		addTask(task);
+		task.setOnSucceeded(e -> {
+			addSuccessfulDownload(task.getFile());
+			updateProgress(getSuccessfulDownloads().size(),
+					getTotalDownloads());
+			updateMessage(String.format("Downloading mods... %s / %s",
+					getSuccessfulDownloads().size(), getTotalDownloads()));
+			latch.countDown();
+		});
+		task.setOnFailed(e -> {
+			if (task.getException() instanceof BadResponseCodeException) {
+				addFaildDownload(task.getFile());
+				latch.countDown();
+			} else {
+				task.getException().printStackTrace();
+				removeTask(task);
+				startModDownload(latch, manifest, file, modsDir);
+			}
+		});
+		task.setOnCancelled(e -> {
+			latch.countDown();
+		});
+		executor.execute(task);
+	}
 }

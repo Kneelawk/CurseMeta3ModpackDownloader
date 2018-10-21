@@ -229,7 +229,7 @@ public class DownloaderUI {
 		if (listener != null) {
 			listener.downloadModpack(modpackZip, toDir,
 					statusLabel.textProperty(), overallProgress,
-					tasks.getItems(), running, error, numThreads.get());
+					tasks.itemsProperty(), running, error, numThreads.get());
 		}
 	}
 

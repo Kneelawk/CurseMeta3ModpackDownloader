@@ -35,7 +35,9 @@ public class FileModpackParseTask extends ModpackParseTask {
 
 	@Override
 	protected ModpackParseResult call() throws Exception {
-		FileId id = ModpackXmlParser.parseModpackBin(docBuilder, getFromPath());
+		Path modpackPath = getModpackPath();
+
+		FileId id = ModpackXmlParser.parseModpackBin(docBuilder, modpackPath);
 		if (id != null) {
 			// is this modpack file an xml?
 			updateMessage("Loaded xml modpack, downloading zip...");
@@ -44,7 +46,7 @@ public class FileModpackParseTask extends ModpackParseTask {
 			FileJson file = new FileJson.Builder(id).setFileData(data).build();
 			updateProject(file);
 
-			Path modpackPath = Files.createTempFile("modpack", ".zip");
+			modpackPath = Files.createTempFile("modpack", ".zip");
 			modpackPath.toFile().deleteOnExit();
 			DownloaderTask downloader = new DownloaderTask(client,
 					data.getDownloadUrl(), modpackPath);
@@ -57,7 +59,8 @@ public class FileModpackParseTask extends ModpackParseTask {
 		}
 
 		updateMessage("Parsing modpack...");
-		Modpack modpack = new Modpack(getModpackPath());
+
+		Modpack modpack = new Modpack(modpackPath);
 		modpack.parseBaseManifest(gson);
 
 		updateModpack(modpack);
