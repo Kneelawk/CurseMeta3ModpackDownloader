@@ -41,9 +41,7 @@ public class FileModpackParseTask extends ModpackParseTask {
 			updateMessage("Loaded xml modpack, downloading zip...");
 			FileDataJson data = AddonUtils.getAddonFile(client, gson, id);
 
-			FileJson file =
-					new FileJson.Builder(id.getProjectID(), id.getFileID())
-							.setFileData(data).build();
+			FileJson file = new FileJson.Builder(id).setFileData(data).build();
 			updateProject(file);
 
 			Path modpackPath = Files.createTempFile("modpack", ".zip");
