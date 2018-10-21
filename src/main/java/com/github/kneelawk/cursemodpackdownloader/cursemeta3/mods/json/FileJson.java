@@ -84,6 +84,12 @@ public class FileJson implements FileId {
 			this.fileID = fileID;
 		}
 
+		public Builder(FileId id) {
+			super();
+			this.projectID = id.getProjectID();
+			this.fileID = id.getProjectID();
+		}
+
 		public FileJson build() {
 			return new FileJson(projectID, fileID, required, fileData,
 					fileError);
