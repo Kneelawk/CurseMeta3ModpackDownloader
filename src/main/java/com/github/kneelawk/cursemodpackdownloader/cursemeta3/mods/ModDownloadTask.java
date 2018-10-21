@@ -99,8 +99,10 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 
 		if (file.getFileData() == null) {
 			// download file details if needed
-			file = AddonUtils.getAddonFileOrLatest(client, gson,
-					minecraftVersion, file);
+			FileJson.Builder fjb = new FileJson.Builder(file);
+			fjb.setFileData(AddonUtils.getAddonFileOrLatest(client, gson,
+					minecraftVersion, file));
+			file = fjb.build();
 			updateFile(file);
 		}
 		FileDataJson data = file.getFileData();

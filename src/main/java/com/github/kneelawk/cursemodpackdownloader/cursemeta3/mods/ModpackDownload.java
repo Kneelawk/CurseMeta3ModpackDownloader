@@ -94,8 +94,7 @@ public class ModpackDownload implements Runnable {
 				});
 				modpackZip = Files.createTempFile("modpack", ".zip");
 				modpackZip.toFile().deleteOnExit();
-				FileJson file = AddonUtils.getAddonFile(client, gson, id);
-				FileDataJson data = file.getFileData();
+				FileDataJson data = AddonUtils.getAddonFile(client, gson, id);
 				Downloader downloader = new Downloader(client,
 						data.getDownloadUrl(), modpackZip);
 				Platform.runLater(() -> {

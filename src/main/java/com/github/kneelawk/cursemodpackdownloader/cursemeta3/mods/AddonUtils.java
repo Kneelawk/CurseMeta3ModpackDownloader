@@ -17,7 +17,6 @@ import org.apache.http.util.EntityUtils;
 
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -29,30 +28,25 @@ public class AddonUtils {
 	public static final String GET_ADDON_FILES_FORMAT =
 			"https://staging_cursemeta.dries007.net/api/v3/direct/addon/%d/files";
 
-	public static FileJson getAddonFile(CloseableHttpClient client, Gson gson,
-			FileId id) throws ClientProtocolException, IOException {
+	public static FileDataJson getAddonFile(CloseableHttpClient client,
+			Gson gson, FileId id) throws ClientProtocolException, IOException {
 		HttpGet get = new HttpGet(String.format(GET_ADDON_FILE_FORMAT,
 				id.getProjectID(), id.getFileID()));
 
 		try (CloseableHttpResponse response = client.execute(get)) {
-			FileJson.Builder file =
-					new FileJson.Builder(id.getProjectID(), id.getFileID());
 
 			StatusLine status = response.getStatusLine();
 			if (status.getStatusCode() / 100 == 2) {
-				file.setFileData(gson.fromJson(
-						EntityUtils.toString(response.getEntity()),
-						FileDataJson.class));
+				return gson.fromJson(EntityUtils.toString(response.getEntity()),
+						FileDataJson.class);
 			} else {
 				throw new BadResponseCodeException(
 						"Bad response status: " + status.toString());
 			}
-
-			return file.build();
 		}
 	}
 
-	public static FileJson getAddonFileOrLatest(CloseableHttpClient client,
+	public static FileDataJson getAddonFileOrLatest(CloseableHttpClient client,
 			Gson gson, String minecraftVersion, FileId id)
 			throws ClientProtocolException, IOException, ParseException {
 		HttpGet request = new HttpGet(
@@ -77,11 +71,8 @@ public class AddonUtils {
 				fileIds.put(file.getId(), file);
 			}
 
-			FileJson.Builder file =
-					new FileJson.Builder(id.getProjectID(), id.getFileID());
-
 			if (fileIds.containsKey(Long.valueOf(id.getFileID()))) {
-				file.setFileData(fileIds.get(Long.valueOf(id.getFileID())));
+				return fileIds.get(Long.valueOf(id.getFileID()));
 			} else {
 				FastDateFormat format = FastDateFormat.getInstance(
 						"yyyy-MM-dd'T'HH:mm:ss", TimeZone.getTimeZone("UTC"));
@@ -96,10 +87,8 @@ public class AddonUtils {
 						newestDate = fileDate;
 					}
 				}
-				file.setFileData(newest);
+				return newest;
 			}
-
-			return file.build();
 		}
 	}
 }
