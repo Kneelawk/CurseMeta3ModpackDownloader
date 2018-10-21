@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.google.gson.Gson;
@@ -152,24 +151,26 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 		updateMessage("Downloading mods... 0 / " + getTotalDownloads());
 		for (FileJson file : manifest.getFiles()) {
-			ModDownloadTask task = new ModDownloadTask(client, gson,
-					manifest.getMinecraft().getVersion(), file, modsDir);
-			tasks.add(task);
-			task.setOnSucceeded(e -> {
-				addSuccessfulDownload(task.getFile());
-				updateProgress(getSuccessfulDownloads().size(),
-						getTotalDownloads());
-				updateMessage(String.format("Downloading mods... %s / %s",
-						getSuccessfulDownloads(), getTotalDownloads()));
-				latch.countDown();
-			});
-			task.setOnFailed(e -> {
-				addFaildDownload(task.getFile());
-				latch.countDown();
-			});
-			task.setOnCancelled(e -> {
-				latch.countDown();
-			});
+			if (file.isRequired()) {
+				ModDownloadTask task = new ModDownloadTask(client, gson,
+						manifest.getMinecraft().getVersion(), file, modsDir);
+				tasks.add(task);
+				task.setOnSucceeded(e -> {
+					addSuccessfulDownload(task.getFile());
+					updateProgress(getSuccessfulDownloads().size(),
+							getTotalDownloads());
+					updateMessage(String.format("Downloading mods... %s / %s",
+							getSuccessfulDownloads(), getTotalDownloads()));
+					latch.countDown();
+				});
+				task.setOnFailed(e -> {
+					addFaildDownload(task.getFile());
+					latch.countDown();
+				});
+				task.setOnCancelled(e -> {
+					latch.countDown();
+				});
+			}
 		}
 		return null;
 	}
