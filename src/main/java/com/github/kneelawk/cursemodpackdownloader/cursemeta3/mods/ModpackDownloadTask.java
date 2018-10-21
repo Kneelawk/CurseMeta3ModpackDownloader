@@ -12,6 +12,7 @@ import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.google.gson.Gson;
 
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -77,7 +78,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	}
 
 	protected final void addTask(ModDownloadTask t) {
-		tasks.add(t);
+		if (Platform.isFxApplicationThread()) {
+			tasks.add(t);
+		} else {
+			Platform.runLater(() -> tasks.add(t));
+		}
 	}
 
 	protected final void addAllTasks(Collection<ModDownloadTask> c) {
@@ -109,7 +114,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	}
 
 	protected final void addSuccessfulDownload(FileJson file) {
-		successfulDownloads.add(file);
+		if (Platform.isFxApplicationThread()) {
+			successfulDownloads.add(file);
+		} else {
+			Platform.runLater(() -> successfulDownloads.add(file));
+		}
 	}
 
 	public final ObservableList<FileJson> getSuccessfulDownloads() {
@@ -125,7 +134,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	}
 
 	protected final void addFaildDownload(FileJson file) {
-		failedDownloads.add(file);
+		if (Platform.isFxApplicationThread()) {
+			failedDownloads.add(file);
+		} else {
+			Platform.runLater(() -> failedDownloads.add(file));
+		}
 	}
 
 	public final ObservableList<FileJson> getFailedDownloads() {
@@ -154,7 +167,7 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 			if (file.isRequired()) {
 				ModDownloadTask task = new ModDownloadTask(client, gson,
 						manifest.getMinecraft().getVersion(), file, modsDir);
-				tasks.add(task);
+				addTask(task);
 				task.setOnSucceeded(e -> {
 					addSuccessfulDownload(task.getFile());
 					updateProgress(getSuccessfulDownloads().size(),

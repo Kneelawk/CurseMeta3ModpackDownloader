@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
@@ -20,6 +21,7 @@ import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.CurseURIUtils;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgress;
 import com.google.gson.Gson;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
@@ -46,6 +48,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 	 */
 
 	protected ObjectProperty<FileJson> file;
+	protected AtomicReference<FileJson> fileUpdate = new AtomicReference<>();
 
 	/*
 	 * Internal
@@ -67,6 +70,18 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 		updateProgress(-1, -1);
 	}
 
+	protected final void setFile(FileJson file) {
+		this.file.set(file);
+	}
+
+	protected final void updateFile(FileJson file) {
+		if (Platform.isFxApplicationThread()) {
+			setFile(file);
+		} else if (fileUpdate.getAndSet(file) == null) {
+			Platform.runLater(() -> setFile(fileUpdate.getAndSet(null)));
+		}
+	}
+
 	public final FileJson getFile() {
 		return file.get();
 	}
@@ -77,16 +92,16 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 
 	@Override
 	public ModDownloadResult call() throws Exception {
-		updateMessage("Downloading " + this.file.get().getProjectID() + "/"
-				+ this.file.get().getFileID() + "...");
+		FileJson file = getFile();
+		updateMessage("Downloading " + file.getProjectID() + "/"
+				+ file.getFileID() + "...");
 		updateProgress(-1, -1);
 
-		FileJson file = this.file.get();
 		if (file.getFileData() == null) {
 			// download file details if needed
 			file = AddonUtils.getAddonFileOrLatest(client, gson,
-					minecraftVersion, this.file.get());
-			this.file.set(file);
+					minecraftVersion, file);
+			updateFile(file);
 		}
 		FileDataJson data = file.getFileData();
 
