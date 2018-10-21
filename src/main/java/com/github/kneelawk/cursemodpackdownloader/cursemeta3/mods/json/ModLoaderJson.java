@@ -13,7 +13,7 @@ public class ModLoaderJson {
 	private String id;
 	@SerializedName("primary")
 	@Expose
-	private Boolean primary;
+	private boolean primary;
 
 	public String getId() {
 		return id;
@@ -23,11 +23,11 @@ public class ModLoaderJson {
 		this.id = id;
 	}
 
-	public Boolean getPrimary() {
+	public boolean isPrimary() {
 		return primary;
 	}
 
-	public void setPrimary(Boolean primary) {
+	public void setPrimary(boolean primary) {
 		this.primary = primary;
 	}
 

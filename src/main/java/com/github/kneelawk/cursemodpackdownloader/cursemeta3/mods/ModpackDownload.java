@@ -13,6 +13,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.Downloader;
@@ -40,8 +41,10 @@ public class ModpackDownload implements Runnable {
 	protected int successes;
 	protected int failures;
 
-	public ModpackDownload(Path modpackFile, Path toDir, StringProperty status, DoubleProperty overallProgress,
-			ObservableList<ModDownloadTask> downloads, BooleanProperty running, BooleanProperty error, int numThreads) {
+	public ModpackDownload(Path modpackFile, Path toDir, StringProperty status,
+			DoubleProperty overallProgress,
+			ObservableList<ModDownloadTask> downloads, BooleanProperty running,
+			BooleanProperty error, int numThreads) {
 		this.modpackFile = modpackFile;
 		this.toDir = toDir;
 		this.status = status;
@@ -71,8 +74,10 @@ public class ModpackDownload implements Runnable {
 	public void run() {
 		try {
 			Gson gson = new Gson();
-			CloseableHttpClient client = HttpClients.custom().setRedirectStrategy(new RedirectUriSanitizer()).build();
-			DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+			CloseableHttpClient client = HttpClients.custom()
+					.setRedirectStrategy(new RedirectUriSanitizer()).build();
+			DocumentBuilderFactory dbfactory =
+					DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
 
 			Path modsDir = toDir.resolve("mods");
@@ -89,8 +94,10 @@ public class ModpackDownload implements Runnable {
 				});
 				modpackZip = Files.createTempFile("modpack", ".zip");
 				modpackZip.toFile().deleteOnExit();
-				FileDataJson data = AddonUtils.getAddonFile(client, gson, id.getProjectId(), id.getFileId());
-				Downloader downloader = new Downloader(client, data.getDownloadUrl(), modpackZip);
+				FileJson file = AddonUtils.getAddonFile(client, gson, id);
+				FileDataJson data = file.getFileData();
+				Downloader downloader = new Downloader(client,
+						data.getDownloadUrl(), modpackZip);
 				Platform.runLater(() -> {
 					status.bind(downloader.messageProperty());
 				});
@@ -125,16 +132,22 @@ public class ModpackDownload implements Runnable {
 			for (FileJson file : files) {
 				Platform.runLater(() -> {
 					try {
-						ModDownloadTask download = new ModDownloadTask(client, gson,
-								manifest.getMinecraft().getVersion(), file, modsDir);
+						ModDownloadTask download = new ModDownloadTask(client,
+								gson, manifest.getMinecraft().getVersion(),
+								file, modsDir);
 						downloads.add(download);
 						download.setOnSucceeded(event -> {
 							successes++;
-							overallProgress.set(((double) successes) / ((double) numDownloads));
-							status.set(String.format("Downloading mods... %d / %d", successes, numDownloads));
+							overallProgress.set(((double) successes)
+									/ ((double) numDownloads));
+							status.set(
+									String.format("Downloading mods... %d / %d",
+											successes, numDownloads));
 
 							if (successes + failures >= numDownloads) {
-								status.set(String.format("Done. %d / %d Mods downloaded.", successes, numDownloads));
+								status.set(String.format(
+										"Done. %d / %d Mods downloaded.",
+										successes, numDownloads));
 								running.set(false);
 							}
 						});
@@ -142,7 +155,9 @@ public class ModpackDownload implements Runnable {
 							failures++;
 
 							if (successes + failures >= numDownloads) {
-								status.set(String.format("Done. %d / %d Mods downloaded.", successes, numDownloads));
+								status.set(String.format(
+										"Done. %d / %d Mods downloaded.",
+										successes, numDownloads));
 								running.set(false);
 							}
 						});

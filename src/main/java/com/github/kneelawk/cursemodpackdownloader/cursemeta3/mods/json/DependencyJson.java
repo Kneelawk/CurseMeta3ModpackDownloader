@@ -10,24 +10,24 @@ public class DependencyJson {
 
 	@SerializedName("addonId")
 	@Expose
-	private Long addonId;
+	private long addonId;
 	@SerializedName("type")
 	@Expose
-	private Long type;
+	private long type;
 
-	public Long getAddonId() {
+	public long getAddonId() {
 		return addonId;
 	}
 
-	public void setAddonId(Long addonId) {
+	public void setAddonId(long addonId) {
 		this.addonId = addonId;
 	}
 
-	public Long getType() {
+	public long getType() {
 		return type;
 	}
 
-	public void setType(Long type) {
+	public void setType(long type) {
 		this.type = type;
 	}
 

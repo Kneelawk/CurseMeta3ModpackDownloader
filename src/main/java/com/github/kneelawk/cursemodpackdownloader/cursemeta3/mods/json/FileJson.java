@@ -1,50 +1,70 @@
 /*
- * Created with http://www.jsonschema2pojo.org/
+ * Created with help from http://www.jsonschema2pojo.org/
  */
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FileJson {
+public class FileJson implements FileId {
 
 	@SerializedName("projectID")
 	@Expose
-	private Long projectID;
+	private long projectID;
 	@SerializedName("fileID")
 	@Expose
-	private Long fileID;
+	private long fileID;
 	@SerializedName("required")
 	@Expose
-	private Boolean required = true;
+	private boolean required = true;
 	@SerializedName("fileData")
 	@Expose
 	private FileDataJson fileData;
 	@SerializedName("fileError")
 	@Expose
-	private Boolean fileError;
+	private boolean fileError;
 
-	public Long getProjectID() {
-		return projectID;
+	public FileJson() {
+		super();
 	}
 
-	public void setProjectID(Long projectID) {
+	public FileJson(long projectID, long fileID) {
+		super();
 		this.projectID = projectID;
-	}
-
-	public Long getFileID() {
-		return fileID;
-	}
-
-	public void setFileID(Long fileID) {
 		this.fileID = fileID;
 	}
 
-	public Boolean getRequired() {
+	public FileJson(long projectID, long fileID, boolean required,
+			FileDataJson fileData, boolean fileError) {
+		super();
+		this.projectID = projectID;
+		this.fileID = fileID;
+		this.required = required;
+		this.fileData = fileData;
+		this.fileError = fileError;
+	}
+
+	public long getProjectID() {
+		return projectID;
+	}
+
+	public void setProjectID(long projectID) {
+		this.projectID = projectID;
+	}
+
+	public long getFileID() {
+		return fileID;
+	}
+
+	public void setFileID(long fileID) {
+		this.fileID = fileID;
+	}
+
+	public boolean isRequired() {
 		return required;
 	}
 
-	public void setRequired(Boolean required) {
+	public void setRequired(boolean required) {
 		this.required = required;
 	}
 
@@ -56,11 +76,11 @@ public class FileJson {
 		this.fileData = fileData;
 	}
 
-	public Boolean getFileError() {
+	public boolean isFileError() {
 		return fileError;
 	}
 
-	public void setFileError(Boolean fileError) {
+	public void setFileError(boolean fileError) {
 		this.fileError = fileError;
 	}
 

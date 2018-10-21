@@ -11,7 +11,7 @@ public class FileDataJson {
 
 	@SerializedName("id")
 	@Expose
-	private Long id;
+	private long id;
 	@SerializedName("fileName")
 	@Expose
 	private String fileName;
@@ -23,40 +23,40 @@ public class FileDataJson {
 	private String fileDate;
 	@SerializedName("releaseType")
 	@Expose
-	private Long releaseType;
+	private long releaseType;
 	@SerializedName("fileStatus")
 	@Expose
-	private Long fileStatus;
+	private long fileStatus;
 	@SerializedName("downloadUrl")
 	@Expose
 	private String downloadUrl;
 	@SerializedName("isAlternate")
 	@Expose
-	private Boolean isAlternate;
+	private boolean isAlternate;
 	@SerializedName("alternateFileId")
 	@Expose
-	private Long alternateFileId;
+	private long alternateFileId;
 	@SerializedName("dependencies")
 	@Expose
 	private List<DependencyJson> dependencies = null;
 	@SerializedName("isAvailable")
 	@Expose
-	private Boolean isAvailable;
+	private boolean isAvailable;
 	@SerializedName("modules")
 	@Expose
 	private List<ModuleJson> modules = null;
 	@SerializedName("packageFingerprint")
 	@Expose
-	private Long packageFingerprint;
+	private long packageFingerprint;
 	@SerializedName("gameVersion")
 	@Expose
 	private List<String> gameVersion = null;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -84,19 +84,19 @@ public class FileDataJson {
 		this.fileDate = fileDate;
 	}
 
-	public Long getReleaseType() {
+	public long getReleaseType() {
 		return releaseType;
 	}
 
-	public void setReleaseType(Long releaseType) {
+	public void setReleaseType(long releaseType) {
 		this.releaseType = releaseType;
 	}
 
-	public Long getFileStatus() {
+	public long getFileStatus() {
 		return fileStatus;
 	}
 
-	public void setFileStatus(Long fileStatus) {
+	public void setFileStatus(long fileStatus) {
 		this.fileStatus = fileStatus;
 	}
 
@@ -108,19 +108,19 @@ public class FileDataJson {
 		this.downloadUrl = downloadUrl;
 	}
 
-	public Boolean getIsAlternate() {
+	public boolean isAlternate() {
 		return isAlternate;
 	}
 
-	public void setIsAlternate(Boolean isAlternate) {
+	public void setIsAlternate(boolean isAlternate) {
 		this.isAlternate = isAlternate;
 	}
 
-	public Long getAlternateFileId() {
+	public long getAlternateFileId() {
 		return alternateFileId;
 	}
 
-	public void setAlternateFileId(Long alternateFileId) {
+	public void setAlternateFileId(long alternateFileId) {
 		this.alternateFileId = alternateFileId;
 	}
 
@@ -132,11 +132,11 @@ public class FileDataJson {
 		this.dependencies = dependencies;
 	}
 
-	public Boolean getIsAvailable() {
+	public boolean isAvailable() {
 		return isAvailable;
 	}
 
-	public void setIsAvailable(Boolean isAvailable) {
+	public void setIsAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
 
@@ -148,11 +148,11 @@ public class FileDataJson {
 		this.modules = modules;
 	}
 
-	public Long getPackageFingerprint() {
+	public long getPackageFingerprint() {
 		return packageFingerprint;
 	}
 
-	public void setPackageFingerprint(Long packageFingerprint) {
+	public void setPackageFingerprint(long packageFingerprint) {
 		this.packageFingerprint = packageFingerprint;
 	}
 

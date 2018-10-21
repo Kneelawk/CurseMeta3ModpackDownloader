@@ -5,17 +5,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
+
 public class ModpackXmlParser {
 
-	public static FileId parseModpackBin(DocumentBuilder builder, Path modpackFile) {
+	public static FileId parseModpackBin(DocumentBuilder builder,
+			Path modpackFile) {
 		try {
 			Document doc = builder.parse(Files.newInputStream(modpackFile));
 			NodeList packageList = doc.getElementsByTagName("package");
@@ -24,9 +26,10 @@ public class ModpackXmlParser {
 				NodeList projectList = pack.getElementsByTagName("project");
 				if (projectList.getLength() > 0) {
 					Element project = (Element) projectList.item(0);
-					int projectId = Integer.parseInt(project.getAttribute("id"));
+					int projectId =
+							Integer.parseInt(project.getAttribute("id"));
 					int fileId = Integer.parseInt(project.getAttribute("file"));
-					return new FileId(projectId, fileId);
+					return new FileJson(projectId, fileId);
 				}
 			}
 		} catch (SAXException e) {

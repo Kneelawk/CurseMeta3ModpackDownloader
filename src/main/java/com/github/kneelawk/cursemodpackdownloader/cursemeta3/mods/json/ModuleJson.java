@@ -13,7 +13,7 @@ public class ModuleJson {
 	private String folderName;
 	@SerializedName("fimgerprint")
 	@Expose
-	private Long fimgerprint;
+	private long fimgerprint;
 
 	public String getFolderName() {
 		return folderName;
@@ -23,11 +23,11 @@ public class ModuleJson {
 		this.folderName = folderName;
 	}
 
-	public Long getFimgerprint() {
+	public long getFimgerprint() {
 		return fimgerprint;
 	}
 
-	public void setFimgerprint(Long fimgerprint) {
+	public void setFimgerprint(long fimgerprint) {
 		this.fimgerprint = fimgerprint;
 	}
 

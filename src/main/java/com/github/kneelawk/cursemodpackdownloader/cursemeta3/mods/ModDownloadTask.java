@@ -45,7 +45,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 	 * Properties
 	 */
 
-	protected ObjectProperty<FileJson> _file;
+	protected ObjectProperty<FileJson> file;
 
 	/*
 	 * Internal
@@ -54,53 +54,56 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 	protected long currentProgress;
 	protected long contentLength;
 
-	public ModDownloadTask(CloseableHttpClient client, Gson gson, String minecraftVersion, FileJson file, Path toDir) {
+	public ModDownloadTask(CloseableHttpClient client, Gson gson,
+			String minecraftVersion, FileJson file, Path toDir) {
 		this.client = client;
 		this.gson = gson;
 		this.minecraftVersion = minecraftVersion;
-		this._file = new SimpleObjectProperty<>(this, "file", file);
+		this.file = new SimpleObjectProperty<>(this, "file", file);
 		this.toDir = toDir;
 
-		updateMessage("Waiting " + file.getProjectID() + "/" + file.getFileID() + "...");
+		updateMessage("Waiting " + file.getProjectID() + "/" + file.getFileID()
+				+ "...");
 		updateProgress(-1, -1);
 	}
 
 	public final FileJson getFile() {
-		return _file.get();
+		return file.get();
 	}
 
 	public final ObjectProperty<FileJson> fileProperty() {
-		return _file;
+		return file;
 	}
 
 	@Override
 	public ModDownloadResult call() throws Exception {
-		FileJson file = new FileJson();
-		file.setProjectID(_file.get().getProjectID());
-		file.setFileID(_file.get().getFileID());
-
-		updateMessage("Downloading " + file.getProjectID() + "/" + file.getFileID() + "...");
+		updateMessage("Downloading " + this.file.get().getProjectID() + "/"
+				+ this.file.get().getFileID() + "...");
 		updateProgress(-1, -1);
 
-		FileDataJson data = AddonUtils.getAddonFileOrLatest(client, gson, minecraftVersion,
-				file.getProjectID().intValue(), file.getFileID().intValue());
-		file.setFileData(data);
-		_file.set(file);
+		FileJson file = AddonUtils.getAddonFileOrLatest(client, gson,
+				minecraftVersion, this.file.get());
+		this.file.set(file);
+		FileDataJson data = file.getFileData();
 
 		updateMessage("Downloading " + data.getFileNameOnDisk() + "... 0%");
 
 		String unescapedUrl = data.getDownloadUrl();
 
-		to = toDir.resolve(unescapedUrl.substring(unescapedUrl.lastIndexOf('/') + 1));
+		to = toDir.resolve(
+				unescapedUrl.substring(unescapedUrl.lastIndexOf('/') + 1));
 
-		URI saneUri = CurseURIUtils.sanitizeCurseDownloadUri(unescapedUrl, true);
+		URI saneUri =
+				CurseURIUtils.sanitizeCurseDownloadUri(unescapedUrl, true);
 
 		HttpGet request = new HttpGet(saneUri);
 		try (CloseableHttpResponse response = client.execute(request)) {
 			StatusLine status = response.getStatusLine();
 			if (status.getStatusCode() / 100 != 2) {
-				System.out.println("Status error getting file:\n\tInsane:\t" + unescapedUrl + "\n\tSane:\t" + saneUri);
-				throw new BadResponseCodeException("Bad response status: " + status.toString());
+				System.out.println("Status error getting file:\n\tInsane:\t"
+						+ unescapedUrl + "\n\tSane:\t" + saneUri);
+				throw new BadResponseCodeException(
+						"Bad response status: " + status.toString());
 			}
 
 			HttpEntity entity = response.getEntity();
@@ -118,17 +121,20 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 				os.write(buf, 0, len);
 
 				currentProgress += len;
-				updateMessage(String.format("Downloading %s... %.1f%%", data.getFileNameOnDisk(),
-						((double) currentProgress) / ((double) contentLength) * 100));
+				updateMessage(String.format("Downloading %s... %.1f%%",
+						data.getFileNameOnDisk(), ((double) currentProgress)
+								/ ((double) contentLength) * 100));
 				updateProgress(currentProgress, contentLength);
 
 				if (isCancelled()) {
 					EntityUtils.consume(entity);
-					return new ModDownloadResult(data, to, new DownloadProgress(currentProgress, contentLength));
+					return new ModDownloadResult(data, to, new DownloadProgress(
+							currentProgress, contentLength));
 				}
 			}
 		}
 
-		return new ModDownloadResult(data, to, new DownloadProgress(currentProgress, contentLength));
+		return new ModDownloadResult(data, to,
+				new DownloadProgress(currentProgress, contentLength));
 	}
 }

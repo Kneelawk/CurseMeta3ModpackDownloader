@@ -18,7 +18,7 @@ public class ManifestJson {
 	private String manifestType;
 	@SerializedName("manifestVersion")
 	@Expose
-	private Long manifestVersion;
+	private long manifestVersion;
 	@SerializedName("name")
 	@Expose
 	private String name;
@@ -30,7 +30,7 @@ public class ManifestJson {
 	private String author;
 	@SerializedName("projectID")
 	@Expose
-	private Long projectID;
+	private long projectID;
 	@SerializedName("files")
 	@Expose
 	private List<FileJson> files = null;
@@ -54,11 +54,11 @@ public class ManifestJson {
 		this.manifestType = manifestType;
 	}
 
-	public Long getManifestVersion() {
+	public long getManifestVersion() {
 		return manifestVersion;
 	}
 
-	public void setManifestVersion(Long manifestVersion) {
+	public void setManifestVersion(long manifestVersion) {
 		this.manifestVersion = manifestVersion;
 	}
 
@@ -86,11 +86,11 @@ public class ManifestJson {
 		this.author = author;
 	}
 
-	public Long getProjectID() {
+	public long getProjectID() {
 		return projectID;
 	}
 
-	public void setProjectID(Long projectID) {
+	public void setProjectID(long projectID) {
 		this.projectID = projectID;
 	}
 
