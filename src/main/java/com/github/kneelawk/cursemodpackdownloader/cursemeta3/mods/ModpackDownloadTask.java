@@ -1,5 +1,6 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
@@ -155,10 +156,17 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 		ManifestJson manifest = modpack.getManifest();
 
+		if (!Files.exists(toDir)) {
+			Files.createDirectories(toDir);
+		}
+
 		updateMessage("Extracting overrides...");
 		modpack.extractOverrides(toDir);
 
 		Path modsDir = toDir.resolve("mods");
+		if (!Files.exists(modsDir)) {
+			Files.createDirectory(modsDir);
+		}
 
 		CountDownLatch latch = new CountDownLatch(getTotalDownloads());
 
