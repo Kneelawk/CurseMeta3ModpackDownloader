@@ -8,11 +8,11 @@ import java.util.concurrent.Executors;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.google.gson.Gson;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -44,10 +44,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 	protected ListProperty<ModDownloadTask> tasks;
 	protected ReadOnlyIntegerProperty totalDownloads;
-	protected IntegerProperty successfulDownloads;
-	protected IntegerProperty failedDownloads;
+	protected ListProperty<FileJson> successfulDownloads;
+	protected ListProperty<FileJson> failedDownloads;
 
-	public ModpackDownloadTask(CloseableHttpClient client, Gson gson, Modpack modpack, Path toDir, int numThreads) {
+	public ModpackDownloadTask(CloseableHttpClient client, Gson gson,
+			Modpack modpack, Path toDir, int numThreads) {
 		super();
 		this.client = client;
 		this.gson = gson;
@@ -63,9 +64,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 		int numFiles = modpack.getManifest().getFiles().size();
 
 		tasks = new SimpleListProperty<>(this, "tasks");
-		totalDownloads = new SimpleIntegerProperty(this, "totalDownloads", numFiles);
-		successfulDownloads = new SimpleIntegerProperty(this, "successfulDownloads", 0);
-		failedDownloads = new SimpleIntegerProperty(this, "failedDownloads", 0);
+		totalDownloads =
+				new SimpleIntegerProperty(this, "totalDownloads", numFiles);
+		successfulDownloads =
+				new SimpleListProperty<>(this, "successfulDownloads");
+		failedDownloads = new SimpleListProperty<>(this, "failedDownloads");
 
 		updateMessage("Initializing modpack download...");
 	}
@@ -102,35 +105,35 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 		return totalDownloads;
 	}
 
-	protected final void setSuccessfulDownloads(int i) {
-		successfulDownloads.set(i);
+	protected final void setAllSuccessfulDownloads(Collection<FileJson> files) {
+		successfulDownloads.setAll(files);
 	}
 
-	protected final void incrementSuccessfulDownloads() {
-		successfulDownloads.add(1);
+	protected final void addSuccessfulDownload(FileJson file) {
+		successfulDownloads.add(file);
 	}
 
-	public final int getSuccessfulDownloads() {
+	public final ObservableList<FileJson> getSuccessfulDownloads() {
 		return successfulDownloads.get();
 	}
 
-	public final ReadOnlyIntegerProperty successfulDownloadsProperty() {
+	public final ReadOnlyListProperty<FileJson> successfulDownloadsProperty() {
 		return successfulDownloads;
 	}
 
-	protected final void setFailedDownloads(int i) {
-		failedDownloads.set(i);
+	protected final void setAllFailedDownloads(Collection<FileJson> files) {
+		failedDownloads.setAll(files);
 	}
 
-	protected final void incrementFaildDownloads() {
-		failedDownloads.add(1);
+	protected final void addFaildDownload(FileJson file) {
+		failedDownloads.add(file);
 	}
 
-	public final int getFailedDownloads() {
+	public final ObservableList<FileJson> getFailedDownloads() {
 		return failedDownloads.get();
 	}
 
-	public final ReadOnlyIntegerProperty failedDownloadsProperty() {
+	public final ReadOnlyListProperty<FileJson> failedDownloadsProperty() {
 		return failedDownloads;
 	}
 
@@ -144,23 +147,24 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 		modpack.extractOverrides(toDir);
 
 		Path modsDir = toDir.resolve("mods");
-		
+
 		CountDownLatch latch = new CountDownLatch(getTotalDownloads());
 
 		updateMessage("Downloading mods... 0 / " + getTotalDownloads());
 		for (FileJson file : manifest.getFiles()) {
-			ModDownloadTask task = new ModDownloadTask(client, gson, manifest.getMinecraft().getVersion(), file,
-					modsDir);
+			ModDownloadTask task = new ModDownloadTask(client, gson,
+					manifest.getMinecraft().getVersion(), file, modsDir);
 			tasks.add(task);
 			task.setOnSucceeded(e -> {
-				incrementSuccessfulDownloads();
-				updateProgress(getSuccessfulDownloads(), getTotalDownloads());
-				updateMessage(
-						String.format("Downloading mods... %s / %s", getSuccessfulDownloads(), getTotalDownloads()));
+				addSuccessfulDownload(task.getFile());
+				updateProgress(getSuccessfulDownloads().size(),
+						getTotalDownloads());
+				updateMessage(String.format("Downloading mods... %s / %s",
+						getSuccessfulDownloads(), getTotalDownloads()));
 				latch.countDown();
 			});
 			task.setOnFailed(e -> {
-				incrementFaildDownloads();
+				addFaildDownload(task.getFile());
 				latch.countDown();
 			});
 			task.setOnCancelled(e -> {
