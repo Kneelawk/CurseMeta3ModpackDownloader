@@ -81,9 +81,13 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 				+ this.file.get().getFileID() + "...");
 		updateProgress(-1, -1);
 
-		FileJson file = AddonUtils.getAddonFileOrLatest(client, gson,
-				minecraftVersion, this.file.get());
-		this.file.set(file);
+		FileJson file = this.file.get();
+		if (file.getFileData() == null) {
+			// download file details if needed
+			file = AddonUtils.getAddonFileOrLatest(client, gson,
+					minecraftVersion, this.file.get());
+			this.file.set(file);
+		}
 		FileDataJson data = file.getFileData();
 
 		updateMessage("Downloading " + data.getFileNameOnDisk() + "... 0%");
