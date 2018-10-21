@@ -172,7 +172,11 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 				});
 			}
 		}
-		return null;
+
+		latch.await();
+
+		return new ModpackDownloadResult(modpack, modsDir,
+				getSuccessfulDownloads(), getFailedDownloads());
 	}
 
 }
