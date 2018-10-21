@@ -50,6 +50,7 @@ public class CurseMeta3ModpackDownloader extends Application {
 			status.bind(fmpt.messageProperty());
 			fmpt.setOnFailed(e1 -> {
 				fmpt.getException().printStackTrace();
+				status.unbind();
 				running.set(false);
 			});
 			fmpt.setOnSucceeded(e1 -> {
@@ -63,6 +64,10 @@ public class CurseMeta3ModpackDownloader extends Application {
 				downloads.bind(mdt.tasksProperty());
 				mdt.setOnFailed(e2 -> {
 					mdt.getException().printStackTrace();
+					status.unbind();
+					overallProgress.unbind();
+					error.unbind();
+					downloads.unbind();
 					running.set(false);
 				});
 				mdt.setOnSucceeded(e2 -> {
