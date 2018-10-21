@@ -149,13 +149,13 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 
 				if (isCancelled()) {
 					EntityUtils.consume(entity);
-					return new ModDownloadResult(data, to, new DownloadProgress(
+					return new ModDownloadResult(file, to, new DownloadProgress(
 							currentProgress, contentLength));
 				}
 			}
 		}
 
-		return new ModDownloadResult(data, to,
+		return new ModDownloadResult(file, to,
 				new DownloadProgress(currentProgress, contentLength));
 	}
 }
