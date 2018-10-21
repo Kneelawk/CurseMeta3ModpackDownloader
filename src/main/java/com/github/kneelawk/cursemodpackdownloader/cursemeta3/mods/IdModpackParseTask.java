@@ -7,7 +7,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.Downloader;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloaderTask;
 import com.google.gson.Gson;
 
 public class IdModpackParseTask extends ModpackParseTask {
@@ -41,13 +41,13 @@ public class IdModpackParseTask extends ModpackParseTask {
 		updateMessage("Downloading modpack zip...");
 		Path modpackPath = Files.createTempFile("modpack", ".zip");
 		modpackPath.toFile().deleteOnExit();
-		Downloader downloader =
-				new Downloader(client, data.getDownloadUrl(), modpackPath);
+		DownloaderTask downloader =
+				new DownloaderTask(client, data.getDownloadUrl(), modpackPath);
 		downloader.progressProperty().addListener((o, oldVal,
 				newVal) -> updateProgress(newVal.doubleValue() * 0.9d, 1d));
 		downloader.messageProperty()
 				.addListener((o, oldVal, newVal) -> updateMessage(newVal));
-		downloader.call();
+		downloader.run();
 		updateModpackPath(modpackPath);
 
 		updateMessage("Parsing modpack...");

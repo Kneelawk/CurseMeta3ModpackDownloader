@@ -13,7 +13,7 @@ import org.apache.http.util.EntityUtils;
 
 import javafx.concurrent.Task;
 
-public class Downloader extends Task<DownloadResult> {
+public class DownloaderTask extends Task<DownloadResult> {
 	private CloseableHttpClient client;
 	private String from;
 	private String filename;
@@ -22,7 +22,7 @@ public class Downloader extends Task<DownloadResult> {
 	private long currentProgress;
 	private long contentLength;
 
-	public Downloader(CloseableHttpClient client, String from, Path to) {
+	public DownloaderTask(CloseableHttpClient client, String from, Path to) {
 		this.client = client;
 		this.from = from;
 		this.to = to;
@@ -32,7 +32,7 @@ public class Downloader extends Task<DownloadResult> {
 	}
 
 	@Override
-	public DownloadResult call() throws Exception {
+	protected DownloadResult call() throws Exception {
 		HttpGet request = new HttpGet(CurseURIUtils.sanitizeUri(from, true));
 		try (CloseableHttpResponse response = client.execute(request)) {
 			HttpEntity entity = response.getEntity();

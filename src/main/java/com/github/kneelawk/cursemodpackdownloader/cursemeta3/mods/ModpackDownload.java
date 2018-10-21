@@ -16,7 +16,7 @@ import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJ
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.Downloader;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloaderTask;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.RedirectUriSanitizer;
 import com.google.gson.Gson;
 
@@ -95,12 +95,12 @@ public class ModpackDownload implements Runnable {
 				modpackZip = Files.createTempFile("modpack", ".zip");
 				modpackZip.toFile().deleteOnExit();
 				FileDataJson data = AddonUtils.getAddonFile(client, gson, id);
-				Downloader downloader = new Downloader(client,
+				DownloaderTask downloader = new DownloaderTask(client,
 						data.getDownloadUrl(), modpackZip);
 				Platform.runLater(() -> {
 					status.bind(downloader.messageProperty());
 				});
-				downloader.call();
+				downloader.run();
 				Platform.runLater(() -> {
 					status.unbind();
 				});
