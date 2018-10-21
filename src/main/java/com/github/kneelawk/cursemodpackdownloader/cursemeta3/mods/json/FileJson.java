@@ -28,12 +28,6 @@ public class FileJson implements FileId {
 		super();
 	}
 
-	public FileJson(long projectID, long fileID) {
-		super();
-		this.projectID = projectID;
-		this.fileID = fileID;
-	}
-
 	public FileJson(long projectID, long fileID, boolean required,
 			FileDataJson fileData, boolean fileError) {
 		super();
@@ -48,40 +42,96 @@ public class FileJson implements FileId {
 		return projectID;
 	}
 
-	public void setProjectID(long projectID) {
-		this.projectID = projectID;
-	}
-
 	public long getFileID() {
 		return fileID;
-	}
-
-	public void setFileID(long fileID) {
-		this.fileID = fileID;
 	}
 
 	public boolean isRequired() {
 		return required;
 	}
 
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
-
 	public FileDataJson getFileData() {
 		return fileData;
-	}
-
-	public void setFileData(FileDataJson fileData) {
-		this.fileData = fileData;
 	}
 
 	public boolean isFileError() {
 		return fileError;
 	}
 
-	public void setFileError(boolean fileError) {
-		this.fileError = fileError;
-	}
+	public static class Builder {
+		private long projectID;
+		private long fileID;
+		private boolean required = true;
+		private FileDataJson fileData;
+		private boolean fileError;
 
+		public Builder() {
+			super();
+		}
+
+		public Builder(FileJson o) {
+			super();
+			this.projectID = o.getProjectID();
+			this.fileID = o.getFileID();
+			this.required = o.isRequired();
+			this.fileData = o.getFileData();
+			this.fileError = o.isFileError();
+		}
+
+		public Builder(long projectID, long fileID) {
+			super();
+			this.projectID = projectID;
+			this.fileID = fileID;
+		}
+
+		public FileJson build() {
+			return new FileJson(projectID, fileID, required, fileData,
+					fileError);
+		}
+
+		public long getProjectID() {
+			return projectID;
+		}
+
+		public Builder setProjectID(long projectID) {
+			this.projectID = projectID;
+			return this;
+		}
+
+		public long getFileID() {
+			return fileID;
+		}
+
+		public Builder setFileID(long fileID) {
+			this.fileID = fileID;
+			return this;
+		}
+
+		public boolean isRequired() {
+			return required;
+		}
+
+		public Builder setRequired(boolean required) {
+			this.required = required;
+			return this;
+		}
+
+		public FileDataJson getFileData() {
+			return fileData;
+		}
+
+		public Builder setFileData(FileDataJson fileData) {
+			this.fileData = fileData;
+			return this;
+		}
+
+		public boolean isFileError() {
+			return fileError;
+		}
+
+		public Builder setFileError(boolean fileError) {
+			this.fileError = fileError;
+			return this;
+		}
+	}
 }

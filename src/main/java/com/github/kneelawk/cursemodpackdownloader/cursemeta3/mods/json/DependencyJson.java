@@ -15,20 +15,58 @@ public class DependencyJson {
 	@Expose
 	private long type;
 
-	public long getAddonId() {
-		return addonId;
+	public DependencyJson() {
+		super();
 	}
 
-	public void setAddonId(long addonId) {
+	public DependencyJson(long addonId, long type) {
+		super();
 		this.addonId = addonId;
+		this.type = type;
+	}
+
+	public long getAddonId() {
+		return addonId;
 	}
 
 	public long getType() {
 		return type;
 	}
 
-	public void setType(long type) {
-		this.type = type;
-	}
+	public static class Builder {
+		private long addonId;
+		private long type;
 
+		public Builder() {
+			super();
+		}
+
+		public Builder(DependencyJson o) {
+			super();
+			this.addonId = o.getAddonId();
+			this.type = o.getType();
+		}
+
+		public DependencyJson build() {
+			return new DependencyJson(addonId, type);
+		}
+
+		public long getAddonId() {
+			return addonId;
+		}
+
+		public Builder setAddonId(long addonId) {
+			this.addonId = addonId;
+			return this;
+		}
+
+		public long getType() {
+			return type;
+		}
+
+		public Builder setType(long type) {
+			this.type = type;
+			return this;
+		}
+	}
 }

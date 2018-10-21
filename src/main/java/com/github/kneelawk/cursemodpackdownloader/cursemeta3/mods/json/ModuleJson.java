@@ -15,20 +15,54 @@ public class ModuleJson {
 	@Expose
 	private long fimgerprint;
 
-	public String getFolderName() {
-		return folderName;
+	public ModuleJson() {
+		super();
 	}
 
-	public void setFolderName(String folderName) {
+	public ModuleJson(String folderName, long fimgerprint) {
+		super();
 		this.folderName = folderName;
+		this.fimgerprint = fimgerprint;
+	}
+
+	public String getFolderName() {
+		return folderName;
 	}
 
 	public long getFimgerprint() {
 		return fimgerprint;
 	}
 
-	public void setFimgerprint(long fimgerprint) {
-		this.fimgerprint = fimgerprint;
-	}
+	public static class Builder {
+		private String folderName;
+		private long fimgerprint;
 
+		public Builder() {
+			super();
+		}
+
+		public Builder(ModuleJson o) {
+			super();
+			this.folderName = o.getFolderName();
+			this.fimgerprint = o.getFimgerprint();
+		}
+
+		public String getFolderName() {
+			return folderName;
+		}
+
+		public Builder setFolderName(String folderName) {
+			this.folderName = folderName;
+			return this;
+		}
+
+		public long getFimgerprint() {
+			return fimgerprint;
+		}
+
+		public Builder setFimgerprint(long fimgerprint) {
+			this.fimgerprint = fimgerprint;
+			return this;
+		}
+	}
 }

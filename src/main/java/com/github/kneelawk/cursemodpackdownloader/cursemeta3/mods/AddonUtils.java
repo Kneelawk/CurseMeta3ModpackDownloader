@@ -35,7 +35,8 @@ public class AddonUtils {
 				id.getProjectID(), id.getFileID()));
 
 		try (CloseableHttpResponse response = client.execute(get)) {
-			FileJson file = new FileJson(id.getProjectID(), id.getFileID());
+			FileJson.Builder file =
+					new FileJson.Builder(id.getProjectID(), id.getFileID());
 
 			StatusLine status = response.getStatusLine();
 			if (status.getStatusCode() / 100 == 2) {
@@ -47,7 +48,7 @@ public class AddonUtils {
 						"Bad response status: " + status.toString());
 			}
 
-			return file;
+			return file.build();
 		}
 	}
 
@@ -76,7 +77,8 @@ public class AddonUtils {
 				fileIds.put(file.getId(), file);
 			}
 
-			FileJson file = new FileJson(id.getProjectID(), id.getFileID());
+			FileJson.Builder file =
+					new FileJson.Builder(id.getProjectID(), id.getFileID());
 
 			if (fileIds.containsKey(Long.valueOf(id.getFileID()))) {
 				file.setFileData(fileIds.get(Long.valueOf(id.getFileID())));
@@ -97,7 +99,7 @@ public class AddonUtils {
 				file.setFileData(newest);
 			}
 
-			return file;
+			return file.build();
 		}
 	}
 }

@@ -29,7 +29,7 @@ public class ModpackXmlParser {
 					int projectId =
 							Integer.parseInt(project.getAttribute("id"));
 					int fileId = Integer.parseInt(project.getAttribute("file"));
-					return new FileJson(projectId, fileId);
+					return new FileJson.Builder(projectId, fileId).build();
 				}
 			}
 		} catch (SAXException e) {
