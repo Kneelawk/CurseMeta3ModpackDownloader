@@ -14,7 +14,7 @@ import org.apache.http.util.EntityUtils;
 import javafx.concurrent.Task;
 
 public class DownloaderTask extends Task<DownloadResult> {
-	private CloseableHttpClient client;
+	private ClientManager manager;
 	private String from;
 	private String filename;
 	private Path to;
@@ -22,8 +22,8 @@ public class DownloaderTask extends Task<DownloadResult> {
 	private long currentProgress;
 	private long contentLength;
 
-	public DownloaderTask(CloseableHttpClient client, String from, Path to) {
-		this.client = client;
+	public DownloaderTask(ClientManager manager, String from, Path to) {
+		this.manager = manager;
 		this.from = from;
 		this.to = to;
 		this.filename = from.substring(from.lastIndexOf('/') + 1);
@@ -33,6 +33,8 @@ public class DownloaderTask extends Task<DownloadResult> {
 
 	@Override
 	protected DownloadResult call() throws Exception {
+		CloseableHttpClient client = manager.getClient();
+
 		HttpGet request = new HttpGet(CurseURIUtils.sanitizeUri(from, true));
 		try (CloseableHttpResponse response = client.execute(request)) {
 			HttpEntity entity = response.getEntity();

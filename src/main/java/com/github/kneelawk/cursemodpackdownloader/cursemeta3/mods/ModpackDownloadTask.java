@@ -7,11 +7,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
 import com.google.gson.Gson;
 
 import javafx.application.Platform;
@@ -30,7 +29,7 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	 * Tools
 	 */
 
-	protected CloseableHttpClient client;
+	protected ClientManager manager;
 	protected Gson gson;
 	protected ExecutorService executor;
 
@@ -50,10 +49,10 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	protected ListProperty<FileJson> successfulDownloads;
 	protected ListProperty<FileJson> failedDownloads;
 
-	public ModpackDownloadTask(CloseableHttpClient client, Gson gson,
+	public ModpackDownloadTask(ClientManager manager, Gson gson,
 			Modpack modpack, Path toDir, int numThreads) {
 		super();
-		this.client = client;
+		this.manager = manager;
 		this.gson = gson;
 		this.modpack = modpack;
 		this.toDir = toDir;
@@ -68,8 +67,8 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 		tasks = new SimpleListProperty<>(this, "tasks",
 				FXCollections.observableArrayList());
-		totalDownloads = new SimpleIntegerProperty(this, "totalDownloads",
-				numFiles);
+		totalDownloads =
+				new SimpleIntegerProperty(this, "totalDownloads", numFiles);
 		successfulDownloads = new SimpleListProperty<>(this,
 				"successfulDownloads", FXCollections.observableArrayList());
 		failedDownloads = new SimpleListProperty<>(this, "failedDownloads",
@@ -191,13 +190,15 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 		latch.await();
 
+		executor.shutdown();
+
 		return new ModpackDownloadResult(modpack, modsDir,
 				getSuccessfulDownloads(), getFailedDownloads());
 	}
 
 	private void startModDownload(CountDownLatch latch, ManifestJson manifest,
 			FileJson file, Path modsDir) {
-		ModDownloadTask task = new ModDownloadTask(client, gson,
+		ModDownloadTask task = new ModDownloadTask(manager, gson,
 				manifest.getMinecraft().getVersion(), file, modsDir);
 		addTask(task);
 		task.setOnSucceeded(e -> {

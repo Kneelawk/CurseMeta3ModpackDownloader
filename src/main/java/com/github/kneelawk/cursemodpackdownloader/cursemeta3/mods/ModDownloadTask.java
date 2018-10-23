@@ -17,6 +17,7 @@ import org.apache.http.util.EntityUtils;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.CurseURIUtils;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgress;
 import com.google.gson.Gson;
@@ -32,7 +33,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 	 * Tools
 	 */
 
-	protected CloseableHttpClient client;
+	protected ClientManager manager;
 	protected Gson gson;
 
 	/*
@@ -57,9 +58,9 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 	protected long currentProgress;
 	protected long contentLength;
 
-	public ModDownloadTask(CloseableHttpClient client, Gson gson,
+	public ModDownloadTask(ClientManager manager, Gson gson,
 			String minecraftVersion, FileJson file, Path toDir) {
-		this.client = client;
+		this.manager = manager;
 		this.gson = gson;
 		this.minecraftVersion = minecraftVersion;
 		this.file = new SimpleObjectProperty<>(this, "file", file);
@@ -92,6 +93,8 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 
 	@Override
 	public ModDownloadResult call() throws Exception {
+		CloseableHttpClient client = manager.getClient();
+
 		FileJson file = getFile();
 		updateMessage("Downloading " + file.getProjectID() + "/"
 				+ file.getFileID() + "...");
