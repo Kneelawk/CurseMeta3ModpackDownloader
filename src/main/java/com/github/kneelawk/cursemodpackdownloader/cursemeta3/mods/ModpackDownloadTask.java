@@ -68,8 +68,8 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
 		tasks = new SimpleListProperty<>(this, "tasks",
 				FXCollections.observableArrayList());
-		totalDownloads =
-				new SimpleIntegerProperty(this, "totalDownloads", numFiles);
+		totalDownloads = new SimpleIntegerProperty(this, "totalDownloads",
+				numFiles);
 		successfulDownloads = new SimpleListProperty<>(this,
 				"successfulDownloads", FXCollections.observableArrayList());
 		failedDownloads = new SimpleListProperty<>(this, "failedDownloads",
@@ -201,6 +201,8 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 				manifest.getMinecraft().getVersion(), file, modsDir);
 		addTask(task);
 		task.setOnSucceeded(e -> {
+			// add this download to the list of successful downloads and update
+			// this tasks's progress.
 			addSuccessfulDownload(task.getFile());
 			updateProgress(getSuccessfulDownloads().size(),
 					getTotalDownloads());
@@ -209,10 +211,13 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 			latch.countDown();
 		});
 		task.setOnFailed(e -> {
+			// is this an error we know we can't recover from?
 			if (task.getException() instanceof BadResponseCodeException) {
+				// Yes, then add this file to the list of failed downloads.
 				addFaildDownload(task.getFile());
 				latch.countDown();
 			} else {
+				// No, then retry the download.
 				task.getException().printStackTrace();
 				removeTask(task);
 				startModDownload(latch, manifest, file, modsDir);
