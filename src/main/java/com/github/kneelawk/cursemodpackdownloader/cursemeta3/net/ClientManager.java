@@ -86,7 +86,6 @@ public class ClientManager {
 			@Override
 			public void run() {
 				try {
-					System.out.println("Closing client...");
 					client.close();
 				} catch (IOException e) {
 					e.printStackTrace();
