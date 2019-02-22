@@ -14,6 +14,6 @@ module com.github.kneelawk.cursemodpackdownloader.cursemeta3 {
 	requires gson;
 	requires org.apache.httpcomponents.httpclient;
 	requires org.apache.httpcomponents.httpcore;
-	requires commons.codec;
+	requires org.apache.commons.codec;
 	requires org.apache.commons.lang3;
 }

@@ -1,8 +1,12 @@
 /.gradle/
+/.idea/
 /.settings/
 /bin/
 /build/
 /.classpath
 /.project
+
+/*.iml
+/*.ipr
 
 *.kate-swp
