@@ -2,13 +2,12 @@ import org.gradle.plugins.ide.eclipse.model.AbstractClasspathEntry
 
 plugins {
 	id 'java-library'
-	id 'eclipse'
-	id 'com.zyxist.chainsaw' version '0.3.1'
-	id 'org.beryx.jlink' version '2.6.4'
+	id 'org.javamodularity.moduleplugin' version '1.5.0'
+	id 'org.beryx.jlink' version '2.10.4'
 }
 
 version = '0.2.0-alpha-1'
-sourceCompatibility = 11
+sourceCompatibility = 12
 
 def platform = 'linux'
 
@@ -29,7 +28,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'com.github.kneelawk.cursemodpackdownloader.cursemeta3.CurseMeta3ModpackDownloader'
+	mainClassName = "$moduleName/com.github.kneelawk.cursemodpackdownloader.cursemeta3.CurseMeta3ModpackDownloader"
 }
 
 jlink {
@@ -39,15 +38,5 @@ jlink {
 	}
 	mergedModule {
 		requires 'java.sql'
-	}
-}
-
-eclipse.classpath.file {
-	whenMerged { classpath ->
-		classpath.entries.each { entry ->
-			if (entry instanceof AbstractClasspathEntry) {
-				entry.entryAttributes << ['module': 'true']
-			}
-		}
 	}
 }

@@ -8,29 +8,29 @@ import com.google.gson.annotations.SerializedName;
 
 public class ModuleJson {
 
-	@SerializedName("folderName")
+	@SerializedName("FolderName")
 	@Expose
 	private String folderName;
-	@SerializedName("fimgerprint")
+	@SerializedName("Fingerprint")
 	@Expose
-	private long fimgerprint;
+	private long fingerprint;
 
 	public ModuleJson() {
 		super();
 	}
 
-	public ModuleJson(String folderName, long fimgerprint) {
+	public ModuleJson(String folderName, long fingerprint) {
 		super();
 		this.folderName = folderName;
-		this.fimgerprint = fimgerprint;
+		this.fingerprint = fingerprint;
 	}
 
 	public String getFolderName() {
 		return folderName;
 	}
 
-	public long getFimgerprint() {
-		return fimgerprint;
+	public long getFingerprint() {
+		return fingerprint;
 	}
 
 	public static class Builder {
@@ -44,7 +44,7 @@ public class ModuleJson {
 		public Builder(ModuleJson o) {
 			super();
 			this.folderName = o.getFolderName();
-			this.fimgerprint = o.getFimgerprint();
+			this.fimgerprint = o.getFingerprint();
 		}
 
 		public String getFolderName() {

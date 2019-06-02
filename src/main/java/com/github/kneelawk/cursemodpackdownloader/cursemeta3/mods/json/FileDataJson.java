@@ -11,46 +11,46 @@ import com.google.gson.annotations.SerializedName;
 
 public class FileDataJson {
 
-	@SerializedName("id")
+	@SerializedName("Id")
 	@Expose
 	private long id;
-	@SerializedName("fileName")
+	@SerializedName("FileName")
 	@Expose
 	private String fileName;
-	@SerializedName("fileNameOnDisk")
+	@SerializedName("FileNameOnDisk")
 	@Expose
 	private String fileNameOnDisk;
-	@SerializedName("fileDate")
+	@SerializedName("FileDate")
 	@Expose
 	private String fileDate;
-	@SerializedName("releaseType")
+	@SerializedName("ReleaseType")
 	@Expose
 	private long releaseType;
-	@SerializedName("fileStatus")
+	@SerializedName("FileStatus")
 	@Expose
 	private long fileStatus;
-	@SerializedName("downloadUrl")
+	@SerializedName("DownloadURL")
 	@Expose
 	private String downloadUrl;
-	@SerializedName("isAlternate")
+	@SerializedName("IsAlternate")
 	@Expose
 	private boolean isAlternate;
-	@SerializedName("alternateFileId")
+	@SerializedName("AlternateFileId")
 	@Expose
 	private long alternateFileId;
-	@SerializedName("dependencies")
+	@SerializedName("Dependencies")
 	@Expose
 	private List<DependencyJson> dependencies = Lists.newArrayList();
-	@SerializedName("isAvailable")
+	@SerializedName("IsAvailable")
 	@Expose
 	private boolean isAvailable;
-	@SerializedName("modules")
+	@SerializedName("Modules")
 	@Expose
 	private List<ModuleJson> modules = Lists.newArrayList();
-	@SerializedName("packageFingerprint")
+	@SerializedName("PackageFingerprint")
 	@Expose
 	private long packageFingerprint;
-	@SerializedName("gameVersion")
+	@SerializedName("GameVersion")
 	@Expose
 	private List<String> gameVersion = Lists.newArrayList();
 

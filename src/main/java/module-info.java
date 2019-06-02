@@ -1,5 +1,9 @@
 module com.github.kneelawk.cursemodpackdownloader.cursemeta3 {
 	exports com.github.kneelawk.cursemodpackdownloader.cursemeta3;
+	exports com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
+	exports com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json;
+
+	opens com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json to gson;
 
 	requires java.xml;
 	requires java.sql;

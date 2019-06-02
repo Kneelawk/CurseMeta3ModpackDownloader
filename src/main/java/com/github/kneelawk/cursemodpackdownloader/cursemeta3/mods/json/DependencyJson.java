@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class DependencyJson {
 
-	@SerializedName("addonId")
+	@SerializedName("AddonId")
 	@Expose
 	private long addonId;
-	@SerializedName("type")
+	@SerializedName("Type")
 	@Expose
 	private long type;
 
