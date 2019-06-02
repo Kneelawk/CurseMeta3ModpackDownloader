@@ -1,19 +1,5 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.concurrent.atomic.AtomicReference;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
@@ -21,11 +7,23 @@ import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.CurseURIUtils;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgress;
 import com.google.gson.Gson;
-
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ModDownloadTask extends Task<ModDownloadResult> {
 
@@ -59,7 +57,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 	protected long contentLength;
 
 	public ModDownloadTask(ClientManager manager, Gson gson,
-			String minecraftVersion, FileJson file, Path toDir) {
+						   String minecraftVersion, FileJson file, Path toDir) {
 		this.manager = manager;
 		this.gson = gson;
 		this.minecraftVersion = minecraftVersion;

@@ -1,18 +1,14 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
 
 public class Modpack {
 

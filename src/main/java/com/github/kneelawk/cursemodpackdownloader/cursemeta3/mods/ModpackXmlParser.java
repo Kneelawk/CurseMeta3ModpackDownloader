@@ -1,23 +1,21 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import javax.xml.parsers.DocumentBuilder;
-
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ModpackXmlParser {
 
 	public static FileId parseModpackBin(DocumentBuilder builder,
-			Path modpackFile) {
+										 Path modpackFile) {
 		try {
 			Document doc = builder.parse(Files.newInputStream(modpackFile));
 			NodeList packageList = doc.getElementsByTagName("package");

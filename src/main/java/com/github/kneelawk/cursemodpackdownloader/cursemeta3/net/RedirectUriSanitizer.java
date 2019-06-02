@@ -1,14 +1,14 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.net;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Locale;
-
 import org.apache.commons.codec.DecoderException;
 import org.apache.http.ProtocolException;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.util.TextUtils;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Locale;
 
 public class RedirectUriSanitizer extends DefaultRedirectStrategy {
 	@Override
@@ -26,7 +26,7 @@ public class RedirectUriSanitizer extends DefaultRedirectStrategy {
 			}
 
 			URI result = b.build();
-			
+
 			// debugging can be done here
 
 			return result;

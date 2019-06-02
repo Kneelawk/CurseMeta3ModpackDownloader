@@ -5,7 +5,7 @@ import java.io.IOException;
 public class BadResponseCodeException extends IOException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 5596135043380794664L;
 

@@ -1,11 +1,5 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.net;
 
-import java.io.IOException;
-import java.lang.ref.Cleaner;
-import java.security.NoSuchAlgorithmException;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -16,6 +10,11 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.lang.ref.Cleaner;
+import java.security.NoSuchAlgorithmException;
 
 public class ClientManager {
 	private Cleaner cleaner;
@@ -38,10 +37,10 @@ public class ClientManager {
 		cleaner = Cleaner.create();
 		try {
 			connectionSocketFactory = new SSLConnectionSocketFactory(
-					SSLContext.getDefault(), new String[] {
-							"TLSv1.2"
-					}, null, NoopHostnameVerifier.INSTANCE);
-			registry = RegistryBuilder.<ConnectionSocketFactory> create()
+					SSLContext.getDefault(), new String[]{
+					"TLSv1.2"
+			}, null, NoopHostnameVerifier.INSTANCE);
+			registry = RegistryBuilder.<ConnectionSocketFactory>create()
 					.register("https", connectionSocketFactory)
 					.register("http", PlainConnectionSocketFactory.INSTANCE)
 					.build();
@@ -61,7 +60,7 @@ public class ClientManager {
 		private final Cleaner.Cleanable cleanable;
 
 		public CloseableHttpClientWrapper(Cleaner cleaner,
-				CloseableHttpClient client) {
+										  CloseableHttpClient client) {
 			this.client = client;
 			this.state = new State(client);
 			this.cleanable = cleaner.register(this, state);

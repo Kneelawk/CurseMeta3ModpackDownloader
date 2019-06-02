@@ -8,7 +8,7 @@ module com.github.kneelawk.cursemodpackdownloader.cursemeta3 {
 	requires java.xml;
 	requires java.sql;
 	requires java.naming;
-	
+
 	requires jdk.zipfs;
 
 	requires transitive javafx.controls;

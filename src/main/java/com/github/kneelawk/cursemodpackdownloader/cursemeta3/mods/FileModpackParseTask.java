@@ -1,18 +1,16 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import javax.xml.parsers.DocumentBuilder;
-
-import org.apache.http.impl.client.CloseableHttpClient;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileDataJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileId;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloaderTask;
 import com.google.gson.Gson;
+import org.apache.http.impl.client.CloseableHttpClient;
+
+import javax.xml.parsers.DocumentBuilder;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileModpackParseTask extends ModpackParseTask {
 
@@ -25,7 +23,7 @@ public class FileModpackParseTask extends ModpackParseTask {
 	protected DocumentBuilder docBuilder;
 
 	public FileModpackParseTask(Gson gson, ClientManager manager,
-			DocumentBuilder docBuilder, Path fromPath) {
+								DocumentBuilder docBuilder, Path fromPath) {
 		this.gson = gson;
 		this.manager = manager;
 		this.docBuilder = docBuilder;
@@ -54,7 +52,7 @@ public class FileModpackParseTask extends ModpackParseTask {
 			DownloaderTask downloader = new DownloaderTask(manager,
 					data.getDownloadUrl(), modpackPath);
 			downloader.progressProperty().addListener((o, oldVal,
-					newVal) -> updateProgress(newVal.doubleValue() * 0.9d, 1d));
+													   newVal) -> updateProgress(newVal.doubleValue() * 0.9d, 1d));
 			downloader.messageProperty()
 					.addListener((o, oldVal, newVal) -> updateMessage(newVal));
 			downloader.run();

@@ -1,8 +1,8 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
-import java.nio.file.Path;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
+
+import java.nio.file.Path;
 
 public class ModpackParseResult {
 	private Path fromPath;
@@ -11,7 +11,7 @@ public class ModpackParseResult {
 	private Modpack modpack;
 
 	public ModpackParseResult(Path fromPath, Path modpackPath, FileJson project,
-			Modpack modpack) {
+							  Modpack modpack) {
 		super();
 		this.fromPath = fromPath;
 		this.modpackPath = modpackPath;

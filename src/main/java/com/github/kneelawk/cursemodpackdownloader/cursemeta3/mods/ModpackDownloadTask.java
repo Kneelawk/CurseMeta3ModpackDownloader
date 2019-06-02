@@ -1,27 +1,22 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
+import com.google.gson.Gson;
+import javafx.application.Platform;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ManifestJson;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.BadResponseCodeException;
-import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
-import com.google.gson.Gson;
-
-import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 
 public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 
@@ -50,7 +45,7 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	protected ListProperty<FileJson> failedDownloads;
 
 	public ModpackDownloadTask(ClientManager manager, Gson gson,
-			Modpack modpack, Path toDir, int numThreads) {
+							   Modpack modpack, Path toDir, int numThreads) {
 		super();
 		this.manager = manager;
 		this.gson = gson;
@@ -197,7 +192,7 @@ public class ModpackDownloadTask extends Task<ModpackDownloadResult> {
 	}
 
 	private void startModDownload(CountDownLatch latch, ManifestJson manifest,
-			FileJson file, Path modsDir) {
+								  FileJson file, Path modsDir) {
 		ModDownloadTask task = new ModDownloadTask(manager, gson,
 				manifest.getMinecraft().getVersion(), file, modsDir);
 		addTask(task);

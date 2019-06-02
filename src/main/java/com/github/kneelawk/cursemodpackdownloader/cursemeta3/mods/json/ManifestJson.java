@@ -3,11 +3,11 @@
  */
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class ManifestJson {
 
@@ -44,8 +44,8 @@ public class ManifestJson {
 	}
 
 	public ManifestJson(MinecraftJson minecraft, String manifestType,
-			long manifestVersion, String name, String version, String author,
-			long projectID, List<FileJson> files, String overrides) {
+						long manifestVersion, String name, String version, String author,
+						long projectID, List<FileJson> files, String overrides) {
 		super();
 		this.minecraft = minecraft;
 		this.manifestType = manifestType;

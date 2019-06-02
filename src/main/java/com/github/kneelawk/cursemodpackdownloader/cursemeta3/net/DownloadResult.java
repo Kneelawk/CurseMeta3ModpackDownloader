@@ -8,7 +8,7 @@ public class DownloadResult {
 	private DownloadProgress progress;
 
 	public DownloadResult(String downloadFrom, Path downloadTo,
-			DownloadProgress progress) {
+						  DownloadProgress progress) {
 		super();
 		this.downloadFrom = downloadFrom;
 		this.downloadTo = downloadTo;

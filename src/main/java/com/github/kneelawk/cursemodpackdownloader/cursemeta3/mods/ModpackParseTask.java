@@ -1,15 +1,14 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods;
 
-import java.nio.file.Path;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.FileJson;
-
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
+
+import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class ModpackParseTask extends Task<ModpackParseResult> {
 

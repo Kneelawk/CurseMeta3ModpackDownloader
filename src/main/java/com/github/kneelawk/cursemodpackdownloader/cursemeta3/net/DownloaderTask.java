@@ -1,17 +1,16 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.net;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
+import javafx.concurrent.Task;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import javafx.concurrent.Task;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class DownloaderTask extends Task<DownloadResult> {
 	private ClientManager manager;

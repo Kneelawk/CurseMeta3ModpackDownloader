@@ -29,7 +29,7 @@ public class FileJson implements FileId {
 	}
 
 	public FileJson(long projectID, long fileID, boolean required,
-			FileDataJson fileData, boolean fileError) {
+					FileDataJson fileData, boolean fileError) {
 		super();
 		this.projectID = projectID;
 		this.fileID = fileID;

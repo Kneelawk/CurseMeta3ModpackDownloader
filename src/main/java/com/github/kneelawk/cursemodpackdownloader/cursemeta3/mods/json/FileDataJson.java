@@ -3,11 +3,11 @@
  */
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class FileDataJson {
 
@@ -59,11 +59,11 @@ public class FileDataJson {
 	}
 
 	public FileDataJson(long id, String fileName, String fileNameOnDisk,
-			String fileDate, long releaseType, long fileStatus,
-			String downloadUrl, boolean isAlternate, long alternateFileId,
-			List<DependencyJson> dependencies, boolean isAvailable,
-			List<ModuleJson> modules, long packageFingerprint,
-			List<String> gameVersion) {
+						String fileDate, long releaseType, long fileStatus,
+						String downloadUrl, boolean isAlternate, long alternateFileId,
+						List<DependencyJson> dependencies, boolean isAvailable,
+						List<ModuleJson> modules, long packageFingerprint,
+						List<String> gameVersion) {
 		super();
 		this.id = id;
 		this.fileName = fileName;

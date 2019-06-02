@@ -1,5 +1,7 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.net;
 
+import org.apache.commons.codec.DecoderException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -8,8 +10,6 @@ import java.nio.charset.Charset;
 import java.util.BitSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.codec.DecoderException;
 
 public class CurseURIUtils {
 	public static final Pattern FULL_URI_PATTERN = Pattern.compile(
@@ -159,7 +159,7 @@ public class CurseURIUtils {
 	 */
 
 	public static URI sanitizeCurseDownloadUri(String insaneUri,
-			boolean escapePath) throws URISyntaxException, DecoderException {
+											   boolean escapePath) throws URISyntaxException, DecoderException {
 		return sanitizeUri("https", "files.forgecdn.net", "/files/", insaneUri,
 				escapePath);
 	}
@@ -170,7 +170,7 @@ public class CurseURIUtils {
 	}
 
 	public static URI sanitizeUri(String baseScheme, String baseHost,
-			String basePath, String insaneUri, boolean escapePath)
+								  String basePath, String insaneUri, boolean escapePath)
 			throws URISyntaxException, DecoderException {
 		Matcher fullUri = FULL_URI_PATTERN.matcher(insaneUri);
 		Matcher hostlessUri = HOSTLESS_URI_PATTERN.matcher(insaneUri);
@@ -229,7 +229,7 @@ public class CurseURIUtils {
 	 */
 
 	public static String urlEncode(final String content, final Charset charset,
-			final BitSet safechars, final boolean blankAsPlus) {
+								   final BitSet safechars, final boolean blankAsPlus) {
 		if (content == null) {
 			return null;
 		}
@@ -258,17 +258,14 @@ public class CurseURIUtils {
 	 * Decode/unescape a portion of a URL, to use with the query part ensure
 	 * {@code plusAsBlank} is true.
 	 *
-	 * @param content
-	 *            the portion to decode
-	 * @param charset
-	 *            the charset to use
-	 * @param plusAsBlank
-	 *            if {@code true}, then convert '+' to space (e.g. for
-	 *            www-url-form-encoded content), otherwise leave as is.
+	 * @param content     the portion to decode
+	 * @param charset     the charset to use
+	 * @param plusAsBlank if {@code true}, then convert '+' to space (e.g. for
+	 *                    www-url-form-encoded content), otherwise leave as is.
 	 * @return encoded string
 	 */
 	public static String urlDecode(final String content, final Charset charset,
-			BitSet safechars, final boolean plusAsBlank) {
+								   BitSet safechars, final boolean plusAsBlank) {
 		if (content == null) {
 			return null;
 		}

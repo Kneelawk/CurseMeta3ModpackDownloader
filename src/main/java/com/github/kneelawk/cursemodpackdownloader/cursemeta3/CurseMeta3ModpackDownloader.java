@@ -1,21 +1,19 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.FileModpackParseTask;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.Modpack;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModpackDownloadTask;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.ui.DownloaderUI;
 import com.google.gson.Gson;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CurseMeta3ModpackDownloader extends Application {
 
@@ -38,7 +36,7 @@ public class CurseMeta3ModpackDownloader extends Application {
 
 		DownloaderUI ui = new DownloaderUI(primaryStage);
 		ui.setDownloadRequestListener((modpackFile, toDir, status,
-				overallProgress, downloads, running, error, numThreads) -> {
+									   overallProgress, downloads, running, error, numThreads) -> {
 			overallProgress.set(-1);
 
 			FileModpackParseTask fmpt = new FileModpackParseTask(gson,
