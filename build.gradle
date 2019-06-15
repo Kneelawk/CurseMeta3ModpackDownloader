@@ -20,9 +20,9 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.12'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
 
-    implementation "org.openjfx:javafx-base:11.0.2:$platform"
-    implementation "org.openjfx:javafx-graphics:11.0.2:$platform"
-    implementation "org.openjfx:javafx-controls:11.0.2:$platform"
+    implementation "org.openjfx:javafx-base:12.0.1:$platform"
+    implementation "org.openjfx:javafx-graphics:12.0.1:$platform"
+    implementation "org.openjfx:javafx-controls:12.0.1:$platform"
 }
 
 application {
@@ -30,7 +30,7 @@ application {
 }
 
 jlink {
-    options = [/*'--strip-debug', */ '--compress', '2', '--no-header-files', '--no-man-pages']
+    options = [/*'--strip-debug', */ '--compress', '2', '--no-header-files', '--no-man-pages', '--add-modules', 'jdk.crypto.cryptoki']
     launcher {
         name = 'CurseMeta3ModpackDownloader'
     }
