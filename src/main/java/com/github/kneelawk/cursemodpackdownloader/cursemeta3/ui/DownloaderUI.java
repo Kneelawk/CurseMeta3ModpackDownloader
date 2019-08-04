@@ -6,6 +6,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.css.PseudoClass;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class DownloaderUI {
 	private Stage primaryStage;
@@ -56,8 +58,9 @@ public class DownloaderUI {
 		VBox root = new VBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(25));
-		root.getStylesheets()
-				.add(getClass().getResource("style.css").toExternalForm());
+		List<String> stylesheets = root.getStylesheets();
+		stylesheets.add(getClass().getResource("obsidian/obsidian.css").toExternalForm());
+		stylesheets.add(getClass().getResource("style.css").toExternalForm());
 
 		GridPane form = new GridPane();
 		form.setAlignment(Pos.TOP_CENTER);
@@ -150,9 +153,9 @@ public class DownloaderUI {
 		root.getChildren().add(bar);
 		overallProgress.addListener((o, oldVal, newVal) -> {
 			if (newVal.doubleValue() >= 1) {
-				bar.getStyleClass().add("progress-bar-done");
+				bar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
 			} else {
-				bar.getStyleClass().remove("progress-bar-done");
+				bar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
 			}
 		});
 
@@ -169,7 +172,7 @@ public class DownloaderUI {
 		tasks.getColumns().add(statusColumn);
 
 		TableColumn<ModDownloadTask, Double> progressColumn =
-				new TableColumn<>("progress");
+				new TableColumn<>("Progress");
 		progressColumn
 				.setCellValueFactory(new PropertyValueFactory<>("progress"));
 		progressColumn

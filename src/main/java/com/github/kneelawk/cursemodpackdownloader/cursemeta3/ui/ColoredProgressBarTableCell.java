@@ -1,6 +1,7 @@
 package com.github.kneelawk.cursemodpackdownloader.cursemeta3.ui;
 
 import javafx.beans.value.ObservableValue;
+import javafx.css.PseudoClass;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -37,16 +38,16 @@ public class ColoredProgressBarTableCell<S> extends TableCell<S, Double> {
 			if (observable != null) {
 				progressBar.progressProperty().bind(observable);
 				if (observable.getValue() >= 1) {
-					progressBar.getStyleClass().add("progress-bar-done");
+					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
 				} else {
-					progressBar.getStyleClass().remove("progress-bar-done");
+					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
 				}
 			} else if (item != null) {
 				progressBar.setProgress(item);
 				if (item >= 1) {
-					progressBar.getStyleClass().add("progress-bar-done");
+					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
 				} else {
-					progressBar.getStyleClass().remove("progress-bar-done");
+					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
 				}
 			}
 

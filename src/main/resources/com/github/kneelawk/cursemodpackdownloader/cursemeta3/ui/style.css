@@ -10,6 +10,6 @@
 	-fx-border-color: firebrick;
 }
 
-.progress-bar-done {
-	-fx-accent: #47c134;
+.progress-bar:done {
+	-fx-accent: #00bb03;
 }
