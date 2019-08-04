@@ -35,6 +35,7 @@ public class DownloaderUI {
     protected TextField modpackField;
     protected TextField outputField;
     protected Label statusLabel;
+    protected TextField modLoader;
     protected TableView<ModDownloadTask> tasks;
     protected DoubleProperty overallProgress;
     protected BooleanProperty running = new SimpleBooleanProperty(false);
@@ -145,6 +146,10 @@ public class DownloaderUI {
             }
         });
 
+        modLoader = new TextField("Mod Loaders: ");
+        modLoader.setEditable(false);
+        root.getChildren().add(modLoader);
+
         ProgressBar bar = new ProgressBar();
         bar.setProgress(0);
         bar.setMaxWidth(Double.MAX_VALUE);
@@ -224,7 +229,7 @@ public class DownloaderUI {
 
         if (listener != null) {
             listener.downloadModpack(modpackZip, toDir,
-                    statusLabel.textProperty(), overallProgress,
+                    statusLabel.textProperty(), modLoader.textProperty(), overallProgress,
                     tasks.itemsProperty(), running, error, numThreads.get());
         }
     }

@@ -3,6 +3,7 @@ package com.github.kneelawk.cursemodpackdownloader.cursemeta3;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.FileModpackParseTask;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.Modpack;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.ModpackDownloadTask;
+import com.github.kneelawk.cursemodpackdownloader.cursemeta3.mods.json.ModLoaderJson;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.ClientManager;
 import com.github.kneelawk.cursemodpackdownloader.cursemeta3.ui.DownloaderUI;
 import com.google.gson.Gson;
@@ -14,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class CurseMeta3ModpackDownloader extends Application {
 
@@ -35,7 +37,7 @@ public class CurseMeta3ModpackDownloader extends Application {
                 });
 
         DownloaderUI ui = new DownloaderUI(primaryStage);
-        ui.setDownloadRequestListener((modpackFile, toDir, status,
+        ui.setDownloadRequestListener((modpackFile, toDir, status, modLoader,
                                        overallProgress, downloads, running, error, numThreads) -> {
             overallProgress.set(-1);
 
@@ -50,6 +52,14 @@ public class CurseMeta3ModpackDownloader extends Application {
             fmpt.setOnSucceeded(e1 -> {
                 status.unbind();
                 Modpack modpack = fmpt.getModpack();
+
+                if (modpack.getManifest().getMinecraft().getModLoaders().size() > 0) {
+                    modLoader
+                            .set("Mod Loaders: " + modpack.getManifest().getMinecraft().getModLoaders().stream()
+                                    .map(ModLoaderJson::getId)
+                                    .collect(Collectors.joining(", ")));
+                }
+
                 ModpackDownloadTask mdt = new ModpackDownloadTask(clientManager,
                         gson, modpack, toDir, numThreads);
                 status.bind(mdt.messageProperty());

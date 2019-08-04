@@ -11,7 +11,7 @@ import java.nio.file.Path;
 
 public interface DownloadRequestListener {
     void downloadModpack(Path modpackFile, Path toDir,
-                         StringProperty status, DoubleProperty overallProgress,
+                         StringProperty status, StringProperty modLoader, DoubleProperty overallProgress,
                          ObjectProperty<ObservableList<ModDownloadTask>> downloads,
                          BooleanProperty running, BooleanProperty error, int numThreads);
 }
