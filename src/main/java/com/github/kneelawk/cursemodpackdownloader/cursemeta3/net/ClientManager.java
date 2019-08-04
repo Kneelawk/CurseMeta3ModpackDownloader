@@ -17,80 +17,80 @@ import java.lang.ref.Cleaner;
 import java.security.NoSuchAlgorithmException;
 
 public class ClientManager {
-	private Cleaner cleaner;
-	private SSLConnectionSocketFactory connectionSocketFactory;
-	private Registry<ConnectionSocketFactory> registry;
-	private RedirectUriSanitizer redirectUriSanitizer =
-			new RedirectUriSanitizer();
+    private Cleaner cleaner;
+    private SSLConnectionSocketFactory connectionSocketFactory;
+    private Registry<ConnectionSocketFactory> registry;
+    private RedirectUriSanitizer redirectUriSanitizer =
+            new RedirectUriSanitizer();
 
-	private ThreadLocal<CloseableHttpClientWrapper> clients =
-			ThreadLocal.withInitial(() -> {
-				HttpClientConnectionManager connectionManager =
-						new BasicHttpClientConnectionManager(registry);
-				return new CloseableHttpClientWrapper(cleaner, HttpClients
-						.custom().setRedirectStrategy(redirectUriSanitizer)
-						.setSSLSocketFactory(connectionSocketFactory)
-						.setConnectionManager(connectionManager).build());
-			});
+    private ThreadLocal<CloseableHttpClientWrapper> clients =
+            ThreadLocal.withInitial(() -> {
+                HttpClientConnectionManager connectionManager =
+                        new BasicHttpClientConnectionManager(registry);
+                return new CloseableHttpClientWrapper(cleaner, HttpClients
+                        .custom().setRedirectStrategy(redirectUriSanitizer)
+                        .setSSLSocketFactory(connectionSocketFactory)
+                        .setConnectionManager(connectionManager).build());
+            });
 
-	public ClientManager() {
-		cleaner = Cleaner.create();
-		try {
-			connectionSocketFactory = new SSLConnectionSocketFactory(
-					SSLContext.getDefault(), new String[]{
-					"TLSv1.2"
-			}, null, NoopHostnameVerifier.INSTANCE);
-			registry = RegistryBuilder.<ConnectionSocketFactory>create()
-					.register("https", connectionSocketFactory)
-					.register("http", PlainConnectionSocketFactory.INSTANCE)
-					.build();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-	}
+    public ClientManager() {
+        cleaner = Cleaner.create();
+        try {
+            connectionSocketFactory = new SSLConnectionSocketFactory(
+                    SSLContext.getDefault(), new String[]{
+                    "TLSv1.2"
+            }, null, NoopHostnameVerifier.INSTANCE);
+            registry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("https", connectionSocketFactory)
+                    .register("http", PlainConnectionSocketFactory.INSTANCE)
+                    .build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public CloseableHttpClient getClient() {
-		return clients.get().getClient();
-	}
+    public CloseableHttpClient getClient() {
+        return clients.get().getClient();
+    }
 
-	private static class CloseableHttpClientWrapper implements AutoCloseable {
+    private static class CloseableHttpClientWrapper implements AutoCloseable {
 
-		private final CloseableHttpClient client;
-		private final State state;
-		private final Cleaner.Cleanable cleanable;
+        private final CloseableHttpClient client;
+        private final State state;
+        private final Cleaner.Cleanable cleanable;
 
-		public CloseableHttpClientWrapper(Cleaner cleaner,
-										  CloseableHttpClient client) {
-			this.client = client;
-			this.state = new State(client);
-			this.cleanable = cleaner.register(this, state);
-		}
+        public CloseableHttpClientWrapper(Cleaner cleaner,
+                                          CloseableHttpClient client) {
+            this.client = client;
+            this.state = new State(client);
+            this.cleanable = cleaner.register(this, state);
+        }
 
-		public CloseableHttpClient getClient() {
-			return client;
-		}
+        public CloseableHttpClient getClient() {
+            return client;
+        }
 
-		@Override
-		public void close() throws Exception {
-			cleanable.clean();
-		}
+        @Override
+        public void close() throws Exception {
+            cleanable.clean();
+        }
 
-		private static class State implements Runnable {
-			private final CloseableHttpClient client;
+        private static class State implements Runnable {
+            private final CloseableHttpClient client;
 
-			public State(CloseableHttpClient client) {
-				this.client = client;
-			}
+            public State(CloseableHttpClient client) {
+                this.client = client;
+            }
 
-			@Override
-			public void run() {
-				try {
-					client.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+            @Override
+            public void run() {
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-	}
+    }
 }

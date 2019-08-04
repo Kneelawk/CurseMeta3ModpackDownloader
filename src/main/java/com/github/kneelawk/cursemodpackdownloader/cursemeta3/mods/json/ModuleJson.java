@@ -8,61 +8,61 @@ import com.google.gson.annotations.SerializedName;
 
 public class ModuleJson {
 
-	@SerializedName("FolderName")
-	@Expose
-	private String folderName;
-	@SerializedName("Fingerprint")
-	@Expose
-	private long fingerprint;
+    @SerializedName("FolderName")
+    @Expose
+    private String folderName;
+    @SerializedName("Fingerprint")
+    @Expose
+    private long fingerprint;
 
-	public ModuleJson() {
-		super();
-	}
+    public ModuleJson() {
+        super();
+    }
 
-	public ModuleJson(String folderName, long fingerprint) {
-		super();
-		this.folderName = folderName;
-		this.fingerprint = fingerprint;
-	}
+    public ModuleJson(String folderName, long fingerprint) {
+        super();
+        this.folderName = folderName;
+        this.fingerprint = fingerprint;
+    }
 
-	public String getFolderName() {
-		return folderName;
-	}
+    public String getFolderName() {
+        return folderName;
+    }
 
-	public long getFingerprint() {
-		return fingerprint;
-	}
+    public long getFingerprint() {
+        return fingerprint;
+    }
 
-	public static class Builder {
-		private String folderName;
-		private long fimgerprint;
+    public static class Builder {
+        private String folderName;
+        private long fimgerprint;
 
-		public Builder() {
-			super();
-		}
+        public Builder() {
+            super();
+        }
 
-		public Builder(ModuleJson o) {
-			super();
-			this.folderName = o.getFolderName();
-			this.fimgerprint = o.getFingerprint();
-		}
+        public Builder(ModuleJson o) {
+            super();
+            this.folderName = o.getFolderName();
+            this.fimgerprint = o.getFingerprint();
+        }
 
-		public String getFolderName() {
-			return folderName;
-		}
+        public String getFolderName() {
+            return folderName;
+        }
 
-		public Builder setFolderName(String folderName) {
-			this.folderName = folderName;
-			return this;
-		}
+        public Builder setFolderName(String folderName) {
+            this.folderName = folderName;
+            return this;
+        }
 
-		public long getFimgerprint() {
-			return fimgerprint;
-		}
+        public long getFimgerprint() {
+            return fimgerprint;
+        }
 
-		public Builder setFimgerprint(long fimgerprint) {
-			this.fimgerprint = fimgerprint;
-			return this;
-		}
-	}
+        public Builder setFimgerprint(long fimgerprint) {
+            this.fimgerprint = fimgerprint;
+            return this;
+        }
+    }
 }

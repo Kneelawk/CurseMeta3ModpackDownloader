@@ -17,65 +17,65 @@ import java.util.concurrent.Executors;
 
 public class CurseMeta3ModpackDownloader extends Application {
 
-	public static void main(String[] args) throws IOException {
-		Application.launch(args);
-	}
+    public static void main(String[] args) throws IOException {
+        Application.launch(args);
+    }
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		ClientManager clientManager = new ClientManager();
-		Gson gson = new Gson();
-		DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
-		ExecutorService executor =
-				Executors.newSingleThreadExecutor(runnable -> {
-					Thread t = new Thread(runnable);
-					t.setDaemon(true);
-					return t;
-				});
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        ClientManager clientManager = new ClientManager();
+        Gson gson = new Gson();
+        DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
+        ExecutorService executor =
+                Executors.newSingleThreadExecutor(runnable -> {
+                    Thread t = new Thread(runnable);
+                    t.setDaemon(true);
+                    return t;
+                });
 
-		DownloaderUI ui = new DownloaderUI(primaryStage);
-		ui.setDownloadRequestListener((modpackFile, toDir, status,
-									   overallProgress, downloads, running, error, numThreads) -> {
-			overallProgress.set(-1);
+        DownloaderUI ui = new DownloaderUI(primaryStage);
+        ui.setDownloadRequestListener((modpackFile, toDir, status,
+                                       overallProgress, downloads, running, error, numThreads) -> {
+            overallProgress.set(-1);
 
-			FileModpackParseTask fmpt = new FileModpackParseTask(gson,
-					clientManager, dbuilder, modpackFile);
-			status.bind(fmpt.messageProperty());
-			fmpt.setOnFailed(e1 -> {
-				fmpt.getException().printStackTrace();
-				status.unbind();
-				running.set(false);
-			});
-			fmpt.setOnSucceeded(e1 -> {
-				status.unbind();
-				Modpack modpack = fmpt.getModpack();
-				ModpackDownloadTask mdt = new ModpackDownloadTask(clientManager,
-						gson, modpack, toDir, numThreads);
-				status.bind(mdt.messageProperty());
-				overallProgress.bind(mdt.progressProperty());
-				error.bind(mdt.exceptionProperty().isNotNull());
-				downloads.bind(mdt.tasksProperty());
-				mdt.setOnFailed(e2 -> {
-					mdt.getException().printStackTrace();
-					status.unbind();
-					overallProgress.unbind();
-					error.unbind();
-					downloads.unbind();
-					running.set(false);
-				});
-				mdt.setOnSucceeded(e2 -> {
-					status.unbind();
-					overallProgress.unbind();
-					error.unbind();
-					downloads.unbind();
-					running.set(false);
-				});
-				executor.execute(mdt);
-			});
-			executor.execute(fmpt);
-		});
-		ui.show();
-	}
+            FileModpackParseTask fmpt = new FileModpackParseTask(gson,
+                    clientManager, dbuilder, modpackFile);
+            status.bind(fmpt.messageProperty());
+            fmpt.setOnFailed(e1 -> {
+                fmpt.getException().printStackTrace();
+                status.unbind();
+                running.set(false);
+            });
+            fmpt.setOnSucceeded(e1 -> {
+                status.unbind();
+                Modpack modpack = fmpt.getModpack();
+                ModpackDownloadTask mdt = new ModpackDownloadTask(clientManager,
+                        gson, modpack, toDir, numThreads);
+                status.bind(mdt.messageProperty());
+                overallProgress.bind(mdt.progressProperty());
+                error.bind(mdt.exceptionProperty().isNotNull());
+                downloads.bind(mdt.tasksProperty());
+                mdt.setOnFailed(e2 -> {
+                    mdt.getException().printStackTrace();
+                    status.unbind();
+                    overallProgress.unbind();
+                    error.unbind();
+                    downloads.unbind();
+                    running.set(false);
+                });
+                mdt.setOnSucceeded(e2 -> {
+                    status.unbind();
+                    overallProgress.unbind();
+                    error.unbind();
+                    downloads.unbind();
+                    running.set(false);
+                });
+                executor.execute(mdt);
+            });
+            executor.execute(fmpt);
+        });
+        ui.show();
+    }
 
 }

@@ -10,8 +10,8 @@ import javafx.collections.ObservableList;
 import java.nio.file.Path;
 
 public interface DownloadRequestListener {
-	void downloadModpack(Path modpackFile, Path toDir,
-						 StringProperty status, DoubleProperty overallProgress,
-						 ObjectProperty<ObservableList<ModDownloadTask>> downloads,
-						 BooleanProperty running, BooleanProperty error, int numThreads);
+    void downloadModpack(Path modpackFile, Path toDir,
+                         StringProperty status, DoubleProperty overallProgress,
+                         ObjectProperty<ObservableList<ModDownloadTask>> downloads,
+                         BooleanProperty running, BooleanProperty error, int numThreads);
 }

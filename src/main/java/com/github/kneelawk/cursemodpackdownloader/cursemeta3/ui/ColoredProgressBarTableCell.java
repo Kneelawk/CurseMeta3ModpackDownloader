@@ -8,50 +8,50 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 
 public class ColoredProgressBarTableCell<S> extends TableCell<S, Double> {
-	public static <S> Callback<TableColumn<S, Double>, TableCell<S, Double>> forTableColumn() {
-		return param -> new ColoredProgressBarTableCell<S>();
-	}
+    public static <S> Callback<TableColumn<S, Double>, TableCell<S, Double>> forTableColumn() {
+        return param -> new ColoredProgressBarTableCell<S>();
+    }
 
-	protected final ProgressBar progressBar;
-	protected ObservableValue<Double> observable;
+    protected final ProgressBar progressBar;
+    protected ObservableValue<Double> observable;
 
-	public ColoredProgressBarTableCell() {
-		getStyleClass().add("progress-bar-table-cell");
+    public ColoredProgressBarTableCell() {
+        getStyleClass().add("progress-bar-table-cell");
 
-		progressBar = new ProgressBar();
-		progressBar.setMaxWidth(Double.MAX_VALUE);
-	}
+        progressBar = new ProgressBar();
+        progressBar.setMaxWidth(Double.MAX_VALUE);
+    }
 
-	@Override
-	protected void updateItem(Double item, boolean empty) {
-		super.updateItem(item, empty);
+    @Override
+    protected void updateItem(Double item, boolean empty) {
+        super.updateItem(item, empty);
 
-		if (empty) {
-			setGraphic(null);
-		} else {
-			progressBar.progressProperty().unbind();
+        if (empty) {
+            setGraphic(null);
+        } else {
+            progressBar.progressProperty().unbind();
 
-			final TableColumn<S, Double> column = getTableColumn();
-			observable = column == null ? null
-					: column.getCellObservableValue(getIndex());
+            final TableColumn<S, Double> column = getTableColumn();
+            observable = column == null ? null
+                    : column.getCellObservableValue(getIndex());
 
-			if (observable != null) {
-				progressBar.progressProperty().bind(observable);
-				if (observable.getValue() >= 1) {
-					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
-				} else {
-					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
-				}
-			} else if (item != null) {
-				progressBar.setProgress(item);
-				if (item >= 1) {
-					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
-				} else {
-					progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
-				}
-			}
+            if (observable != null) {
+                progressBar.progressProperty().bind(observable);
+                if (observable.getValue() >= 1) {
+                    progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
+                } else {
+                    progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
+                }
+            } else if (item != null) {
+                progressBar.setProgress(item);
+                if (item >= 1) {
+                    progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), true);
+                } else {
+                    progressBar.pseudoClassStateChanged(PseudoClass.getPseudoClass("done"), false);
+                }
+            }
 
-			setGraphic(progressBar);
-		}
-	}
+            setGraphic(progressBar);
+        }
+    }
 }

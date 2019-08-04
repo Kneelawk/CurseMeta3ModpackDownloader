@@ -14,28 +14,28 @@ import java.nio.file.Path;
 
 public class ModpackXmlParser {
 
-	public static FileId parseModpackBin(DocumentBuilder builder,
-										 Path modpackFile) {
-		try {
-			Document doc = builder.parse(Files.newInputStream(modpackFile));
-			NodeList packageList = doc.getElementsByTagName("package");
-			if (packageList.getLength() > 0) {
-				Element pack = (Element) packageList.item(0);
-				NodeList projectList = pack.getElementsByTagName("project");
-				if (projectList.getLength() > 0) {
-					Element project = (Element) projectList.item(0);
-					int projectId =
-							Integer.parseInt(project.getAttribute("id"));
-					int fileId = Integer.parseInt(project.getAttribute("file"));
-					return new FileJson.Builder(projectId, fileId).build();
-				}
-			}
-		} catch (SAXException e) {
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public static FileId parseModpackBin(DocumentBuilder builder,
+                                         Path modpackFile) {
+        try {
+            Document doc = builder.parse(Files.newInputStream(modpackFile));
+            NodeList packageList = doc.getElementsByTagName("package");
+            if (packageList.getLength() > 0) {
+                Element pack = (Element) packageList.item(0);
+                NodeList projectList = pack.getElementsByTagName("project");
+                if (projectList.getLength() > 0) {
+                    Element project = (Element) projectList.item(0);
+                    int projectId =
+                            Integer.parseInt(project.getAttribute("id"));
+                    int fileId = Integer.parseInt(project.getAttribute("file"));
+                    return new FileJson.Builder(projectId, fileId).build();
+                }
+            }
+        } catch (SAXException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

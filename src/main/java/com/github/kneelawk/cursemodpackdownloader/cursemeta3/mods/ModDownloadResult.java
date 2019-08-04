@@ -6,27 +6,27 @@ import com.github.kneelawk.cursemodpackdownloader.cursemeta3.net.DownloadProgres
 import java.nio.file.Path;
 
 public class ModDownloadResult {
-	private FileJson file;
-	private Path downloadTo;
-	private DownloadProgress progress;
+    private FileJson file;
+    private Path downloadTo;
+    private DownloadProgress progress;
 
-	public ModDownloadResult(FileJson file, Path downloadTo,
-							 DownloadProgress progress) {
-		super();
-		this.file = file;
-		this.downloadTo = downloadTo;
-		this.progress = progress;
-	}
+    public ModDownloadResult(FileJson file, Path downloadTo,
+                             DownloadProgress progress) {
+        super();
+        this.file = file;
+        this.downloadTo = downloadTo;
+        this.progress = progress;
+    }
 
-	public FileJson getFile() {
-		return file;
-	}
+    public FileJson getFile() {
+        return file;
+    }
 
-	public Path getDownloadTo() {
-		return downloadTo;
-	}
+    public Path getDownloadTo() {
+        return downloadTo;
+    }
 
-	public DownloadProgress getProgress() {
-		return progress;
-	}
+    public DownloadProgress getProgress() {
+        return progress;
+    }
 }

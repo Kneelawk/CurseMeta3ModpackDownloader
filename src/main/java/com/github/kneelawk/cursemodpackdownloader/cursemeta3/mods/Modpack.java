@@ -12,70 +12,70 @@ import java.nio.file.*;
 
 public class Modpack {
 
-	private FileSystem packfs;
-	private ManifestJson manifest;
+    private FileSystem packfs;
+    private ManifestJson manifest;
 
-	public Modpack(Path modpack) throws IOException {
-		packfs = FileSystems.newFileSystem(modpack, null);
-	}
+    public Modpack(Path modpack) throws IOException {
+        packfs = FileSystems.newFileSystem(modpack, null);
+    }
 
-	public Path getManifestPath() {
-		return packfs.getPath("/manifest.json");
-	}
+    public Path getManifestPath() {
+        return packfs.getPath("/manifest.json");
+    }
 
-	public InputStream getManifestStream() throws IOException {
-		return Files.newInputStream(getManifestPath());
-	}
+    public InputStream getManifestStream() throws IOException {
+        return Files.newInputStream(getManifestPath());
+    }
 
-	public BufferedReader getManifestReader() throws IOException {
-		return Files.newBufferedReader(getManifestPath());
-	}
+    public BufferedReader getManifestReader() throws IOException {
+        return Files.newBufferedReader(getManifestPath());
+    }
 
-	public void parseBaseManifest(Gson gson)
-			throws JsonSyntaxException, JsonIOException, IOException {
-		manifest = gson.fromJson(getManifestReader(), ManifestJson.class);
-	}
+    public void parseBaseManifest(Gson gson)
+            throws JsonSyntaxException, JsonIOException, IOException {
+        manifest = gson.fromJson(getManifestReader(), ManifestJson.class);
+    }
 
-	public ManifestJson getManifest() {
-		return manifest;
-	}
+    public ManifestJson getManifest() {
+        return manifest;
+    }
 
-	public Path getOverridesPath() {
-		if (manifest == null) {
-			throw new IllegalStateException(
-					"The manifest has not yet been parsed");
-		}
+    public Path getOverridesPath() {
+        if (manifest == null) {
+            throw new IllegalStateException(
+                    "The manifest has not yet been parsed");
+        }
 
-		String overrides = manifest.getOverrides();
-		if (!overrides.startsWith("/")) {
-			overrides = "/" + overrides;
-		}
+        String overrides = manifest.getOverrides();
+        if (!overrides.startsWith("/")) {
+            overrides = "/" + overrides;
+        }
 
-		return packfs.getPath(overrides);
-	}
+        return packfs.getPath(overrides);
+    }
 
-	public void extractOverrides(Path toDir) throws IOException {
-		Path overrides = getOverridesPath();
-		Files.walk(overrides).forEach(from -> {
-			Path to = toDir.resolve(overrides.relativize(from).toString());
-			if (Files.isDirectory(from)) {
-				try {
-					Files.createDirectories(to);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					Files.createDirectories(to.getParent());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
-					Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public void extractOverrides(Path toDir) throws IOException {
+        Path overrides = getOverridesPath();
+        Files.walk(overrides).forEach(from -> {
+            Path to = toDir.resolve(overrides.relativize(from).toString());
+            if (Files.isDirectory(from)) {
+                try {
+                    Files.createDirectories(to);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    Files.createDirectories(to.getParent());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

@@ -3,13 +3,13 @@
  */
 
 .error-label {
-	-fx-text-fill: firebrick;
+    -fx-text-fill: firebrick;
 }
 
 .error-field {
-	-fx-border-color: firebrick;
+    -fx-border-color: firebrick;
 }
 
 .progress-bar:done {
-	-fx-accent: #00bb03;
+    -fx-accent: #00bb03;
 }

@@ -4,24 +4,24 @@ import java.io.IOException;
 
 public class BadResponseCodeException extends IOException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 5596135043380794664L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5596135043380794664L;
 
-	public BadResponseCodeException() {
-	}
+    public BadResponseCodeException() {
+    }
 
-	public BadResponseCodeException(String message) {
-		super(message);
-	}
+    public BadResponseCodeException(String message) {
+        super(message);
+    }
 
-	public BadResponseCodeException(Throwable cause) {
-		super(cause);
-	}
+    public BadResponseCodeException(Throwable cause) {
+        super(cause);
+    }
 
-	public BadResponseCodeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public BadResponseCodeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

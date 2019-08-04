@@ -197,7 +197,7 @@
 .spinner .increment-arrow-button:hover,
 .spinner .decrement-arrow-button:hover {
     -fx-background-color: -obsidian-background2-hover-color;
- }
+}
 
 .spinner:focused .increment-arrow-button {
     -fx-background-color: -obsidian-focus-color, -obsidian-background2-color;
