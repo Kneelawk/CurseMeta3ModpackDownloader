@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ModuleJson {
 
-    @SerializedName("FolderName")
+    @SerializedName("folderName")
     @Expose
     private String folderName;
-    @SerializedName("Fingerprint")
+    @SerializedName("fingerprint")
     @Expose
     private long fingerprint;
 

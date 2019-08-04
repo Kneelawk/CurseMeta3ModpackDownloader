@@ -20,9 +20,9 @@ import java.util.TimeZone;
 
 public class AddonUtils {
     public static final String GET_ADDON_FILE_FORMAT =
-            "https://cursemeta.dries007.net/%d/%d.json";
+            "https://addons-ecs.forgesvc.net/api/v2/addon/%d/file/%d";
     public static final String GET_ADDON_FILES_FORMAT =
-            "https://cursemeta.dries007.net/%d/files.json";
+            "https://addons-ecs.forgesvc.net/api/v2/addon/%d/files";
 
     public static FileDataJson getAddonFile(CloseableHttpClient client, Gson gson, FileId id) throws IOException {
         HttpGet get = new HttpGet(String.format(GET_ADDON_FILE_FORMAT,

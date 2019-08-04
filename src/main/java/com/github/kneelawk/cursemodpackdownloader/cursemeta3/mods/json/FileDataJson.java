@@ -11,46 +11,46 @@ import java.util.List;
 
 public class FileDataJson {
 
-    @SerializedName("Id")
+    @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("FileName")
+    @SerializedName("displayName")
+    @Expose
+    private String displayName;
+    @SerializedName("fileName")
     @Expose
     private String fileName;
-    @SerializedName("FileNameOnDisk")
-    @Expose
-    private String fileNameOnDisk;
-    @SerializedName("FileDate")
+    @SerializedName("fileDate")
     @Expose
     private String fileDate;
-    @SerializedName("ReleaseType")
+    @SerializedName("releaseType")
     @Expose
     private long releaseType;
-    @SerializedName("FileStatus")
+    @SerializedName("fileStatus")
     @Expose
     private long fileStatus;
-    @SerializedName("DownloadURL")
+    @SerializedName("downloadUrl")
     @Expose
     private String downloadUrl;
-    @SerializedName("IsAlternate")
+    @SerializedName("isAlternate")
     @Expose
     private boolean isAlternate;
-    @SerializedName("AlternateFileId")
+    @SerializedName("alternateFileId")
     @Expose
     private long alternateFileId;
-    @SerializedName("Dependencies")
+    @SerializedName("dependencies")
     @Expose
     private List<DependencyJson> dependencies = Lists.newArrayList();
-    @SerializedName("IsAvailable")
+    @SerializedName("isAvailable")
     @Expose
     private boolean isAvailable;
-    @SerializedName("Modules")
+    @SerializedName("modules")
     @Expose
     private List<ModuleJson> modules = Lists.newArrayList();
-    @SerializedName("PackageFingerprint")
+    @SerializedName("packageFingerprint")
     @Expose
     private long packageFingerprint;
-    @SerializedName("GameVersion")
+    @SerializedName("gameVersion")
     @Expose
     private List<String> gameVersion = Lists.newArrayList();
 
@@ -58,7 +58,7 @@ public class FileDataJson {
         super();
     }
 
-    public FileDataJson(long id, String fileName, String fileNameOnDisk,
+    public FileDataJson(long id, String displayName, String fileName,
                         String fileDate, long releaseType, long fileStatus,
                         String downloadUrl, boolean isAlternate, long alternateFileId,
                         List<DependencyJson> dependencies, boolean isAvailable,
@@ -66,8 +66,8 @@ public class FileDataJson {
                         List<String> gameVersion) {
         super();
         this.id = id;
+        this.displayName = displayName;
         this.fileName = fileName;
-        this.fileNameOnDisk = fileNameOnDisk;
         this.fileDate = fileDate;
         this.releaseType = releaseType;
         this.fileStatus = fileStatus;
@@ -85,12 +85,12 @@ public class FileDataJson {
         return id;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public String getFileNameOnDisk() {
-        return fileNameOnDisk;
+    public String getFileName() {
+        return fileName;
     }
 
     public String getFileDate() {
@@ -160,8 +160,8 @@ public class FileDataJson {
         public Builder(FileDataJson o) {
             super();
             this.id = o.getId();
-            this.fileName = o.getFileName();
-            this.fileNameOnDisk = o.getFileNameOnDisk();
+            this.fileName = o.getDisplayName();
+            this.fileNameOnDisk = o.getFileName();
             this.fileDate = o.getFileDate();
             this.releaseType = o.getReleaseType();
             this.fileStatus = o.getFileStatus();

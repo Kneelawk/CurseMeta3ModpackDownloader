@@ -108,7 +108,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
         }
         FileDataJson data = file.getFileData();
 
-        updateMessage("Downloading " + data.getFileNameOnDisk() + "... 0%");
+        updateMessage("Downloading " + data.getFileName() + "... 0%");
 
         String unescapedUrl = data.getDownloadUrl();
 
@@ -133,7 +133,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
             InputStream is = entity.getContent();
             OutputStream os = Files.newOutputStream(to);
 
-            updateMessage("Downloading " + data.getFileNameOnDisk() + "... 0%");
+            updateMessage("Downloading " + data.getFileName() + "... 0%");
             updateProgress(0, contentLength);
 
             currentProgress = 0;
@@ -144,7 +144,7 @@ public class ModDownloadTask extends Task<ModDownloadResult> {
 
                 currentProgress += len;
                 updateMessage(String.format("Downloading %s... %.1f%%",
-                        data.getFileNameOnDisk(), ((double) currentProgress)
+                        data.getFileName(), ((double) currentProgress)
                                 / ((double) contentLength) * 100));
                 updateProgress(currentProgress, contentLength);
 
