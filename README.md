@@ -1,7 +1,10 @@
 # CurseMeta3ModpackDownloader
-This is a simple JavaFx-based Curse Modpack Downloader that relies on
-[Dries007's CurseMeta v3](https://github.com/dries007/CurseMeta). This project uses Dries007's
+This is a simple JavaFx-based Curse Modpack Downloader that used to rely on
+[Dries007's CurseMeta v3](https://github.com/dries007/CurseMeta). This project used to use Dries007's
 [staging version of the CurseMeta v3](https://staging_cursemeta.dries007.net/).
+
+### Note
+Dries007's CurseMeta v3 has been deprecated and instead this project uses the official Twitch Addon API ([Documentation](https://twitchappapi.docs.apiary.io/)).
 
 ## Setup
 In order to build this project, you must have Java 12 installed. This project uses Gradle as its build
