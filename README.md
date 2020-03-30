@@ -4,7 +4,7 @@ This is a simple JavaFx-based Curse Modpack Downloader that relies on
 [staging version of the CurseMeta v3](https://staging_cursemeta.dries007.net/).
 
 ## Setup
-In order to build this project, you must have Java 11 installed. This project uses Gradle as its build
+In order to build this project, you must have Java 12 installed. This project uses Gradle as its build
 system and uses Zyxist's Chainsaw plugin for module management and Beryx's Badass-Jlink-Plugin for
 creating distributable packages.
 
